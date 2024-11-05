@@ -32,18 +32,6 @@ func main() {
 	})
 	log.SetLevel(logrus.InfoLevel)
 
-	// Serve embedded files as an HTTP file system
-	svelteFiles, _ := fs.Sub(embeddedFiles, "svelte/dist")
-	fs := http.FileServer(http.FS(svelteFiles))
-	http.Handle("/", fs)
-
-	// Register API endpoints with their handler functions and allowed HTTP methods
-	registerAPI("/api/docker-ready", API_dockerReady, http.MethodGet)
-	registerAPI("/api/endpoints", API_listEndpoints, http.MethodGet)
-
-	log.Info("Server started on port 13777")
-	log.Fatal(http.ListenAndServe(":13777", nil))
-
 	// Check if Docker is installed and log result
 	if installed, installMsg := dockerInstalled(); installed {
 		log.Info("Docker installation status: Installed")
@@ -57,6 +45,19 @@ func main() {
 	} else {
 		log.Error("Docker daemon status: Not running - " + daemonMsg)
 	}
+
+	// Serve embedded files as an HTTP file system
+	svelteFiles, _ := fs.Sub(embeddedFiles, "svelte/dist")
+	fs := http.FileServer(http.FS(svelteFiles))
+	http.Handle("/", fs)
+
+	// Register API endpoints with their handler functions and allowed HTTP methods
+	registerAPI("/api/docker-ready", API_dockerReady, http.MethodGet)
+	registerAPI("/api/endpoints", API_listEndpoints, http.MethodGet)
+
+	log.Info("Server started on port 13777")
+	log.Fatal(http.ListenAndServe(":13777", nil))
+
 }
 
 // registerAPI registers an API endpoint with a specific function and allowed method,
