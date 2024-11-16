@@ -31,8 +31,23 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
         exit(await spawn('pkg', ['.']))
     */
 
-    await script('BuildGoWin')
-    await script('BuildGoLinux')
+    // Ensure dist directory exists
+    const { fs, path } = modules
+    const distDir = path.join(process.cwd(), 'dist')
+    if (!fs.existsSync(distDir)) {
+        fs.mkdirSync(distDir)
+    }
+
+    // Build for Windows
+    info('Building Windows executable...')
+    let winExitCode = await spawn('go', ['build', '-tags', 'dev', '-o', path.join(distDir, 'Dampfer.exe')], true, {
+        env: { ...process.env, GOOS: 'windows', GOARCH: 'amd64' }
+    })
+    if (winExitCode !== 0) {
+        return error('Failed to build Windows executable')
+    }
+
+    info('Build completed successfully for Windows')
 
     /* PLEASE DON'T CHANGE METHOD NAMES, AS IT MIGHT BE REQUIRED BY RUNTIMES */
     /* PLEASE DON'T DELETE OR MODIFY THIS COMMENT, IT WILL BE USED TO INJECT SCRIPTS BY KELP */

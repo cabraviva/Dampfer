@@ -45,5 +45,8 @@
         "**/*.yaml": false,
         "**/Makefile": false,
         "**/*.sh": false
-    }
+    },
+    "cSpell.words": [
+        "sirupsen"
+    ]
 }

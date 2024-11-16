@@ -1,10 +1,8 @@
 package main
 
 import (
-	"embed"
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"net/http"
 	"os/exec"
 	"runtime"
@@ -13,16 +11,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Embed files in the svelte/public directory
-//
-//go:embed svelte/dist/*
-var embeddedFiles embed.FS
-
 // stores all registered endpoints
 var registeredEndpoints []string
 
 // Register Logger
 var log = logrus.New()
+
+var svelteFS http.Handler // Shared across dev.go and prod.go
 
 func main() {
 	// Logging
@@ -54,9 +49,8 @@ func main() {
 	}
 
 	// Serve embedded files as an HTTP file system
-	svelteFiles, _ := fs.Sub(embeddedFiles, "svelte/dist")
-	fs := http.FileServer(http.FS(svelteFiles))
-	http.Handle("/", fs)
+	// svelteFS := http.FileServer(http.Dir("svelte/dist"))
+	http.Handle("/", svelteFS)
 
 	// Register API endpoints with their handler functions and allowed HTTP methods
 	registerAPI("/api/endpoints", API_listEndpoints, http.MethodGet)
