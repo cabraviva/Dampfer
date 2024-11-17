@@ -39,15 +39,17 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
     }
 
     // Build for Linux
-    info('Building Linux executable...')
-    let linuxExitCode = await spawn('go', ['build', '-o', path.join(distDir, 'Dampfer')], true, {
-        env: { ...process.env, GOOS: 'linux', GOARCH: 'amd64' }
-    })
-    if (linuxExitCode !== 0) {
-        return error('Failed to build Linux executable')
-    }
+    for (const arch of ['amd64', 'arm', 'arm32']) {
+        info(`Building Linux executable for ${arch}...`)
+        let linuxExitCode = await spawn('go', ['build', '-o', path.join(distDir, `Dampfer-linux-${arch}`)], true, {
+            env: { ...process.env, GOOS: 'linux', GOARCH: arch }
+        })
+        if (linuxExitCode !== 0) {
+            return error(`Failed to build Linux executable for ${arch}`)
+        }
 
-    info('Build completed successfully for Linux')
+        info(`Build completed successfully for Linux-${arch}`)
+    }
 
     /* PLEASE DON'T CHANGE METHOD NAMES, AS IT MIGHT BE REQUIRED BY RUNTIMES */
     /* PLEASE DON'T DELETE OR MODIFY THIS COMMENT, IT WILL BE USED TO INJECT SCRIPTS BY KELP */

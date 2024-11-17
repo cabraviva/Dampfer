@@ -1,1 +1,1 @@
-[{"id":"main","paths":{"include":["*"],"exclude":[]},"protected":false}]
+[{"id":"main","paths":{"include":["*"],"exclude":[]},"protected":false},{"id":"go","paths":{"include":["*.go","*/**/*.go","**/*.go","go.mod","go.sum"],"exclude":[]},"protected":false}]

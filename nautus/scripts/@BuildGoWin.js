@@ -40,7 +40,7 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
 
     // Build for Windows
     info('Building Windows executable...')
-    let winExitCode = await spawn('go', ['build', '-o', path.join(distDir, 'Dampfer.exe')], true, {
+    let winExitCode = await spawn('go', ['build', '-o', path.join(distDir, 'Dampfer-win-amd64.exe')], true, {
         env: { ...process.env, GOOS: 'windows', GOARCH: 'amd64' }
     })
     if (winExitCode !== 0) {

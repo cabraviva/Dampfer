@@ -33,6 +33,7 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
 
     await script('BuildGoWin')
     await script('BuildGoLinux')
+    await script('BuildGoMacOs')
 
     /* PLEASE DON'T CHANGE METHOD NAMES, AS IT MIGHT BE REQUIRED BY RUNTIMES */
     /* PLEASE DON'T DELETE OR MODIFY THIS COMMENT, IT WILL BE USED TO INJECT SCRIPTS BY KELP */

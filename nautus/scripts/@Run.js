@@ -21,26 +21,28 @@ Over time we might add more (just check using info(modules)), but right now it's
 - modules.axios
 */
 
-module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules, nodeBin) => {
-    const { fs, path } = modules
-    const tmpDir = path.join(process.cwd(), 'tmp')
+module.exports = (cmd, os, info, warn, error, exit, script, spawn, modules, nodeBin) => {
+    return new Promise(async (resolve, reject) => {
+        const { fs, path } = modules
+        const tmpDir = path.join(process.cwd(), 'tmp')
 
-    // Clean up the tmp directory if it already exists, then create it
-    if (fs.existsSync(tmpDir)) {
-        fs.rmSync(tmpDir, { recursive: true })
-    }
-    fs.mkdirSync(tmpDir)
+        // Clean up the tmp directory if it already exists, then create it
+        if (fs.existsSync(tmpDir)) {
+            fs.rmSync(tmpDir, { recursive: true })
+        }
+        fs.mkdirSync(tmpDir)
 
-    // Copy the executable to the tmp directory
-    const sourceFile = os() === 'windows' ? 'dist/Dampfer.exe' : 'dist/Dampfer'
-    const destFile = path.join(tmpDir, path.basename(sourceFile))
-    fs.copyFileSync(sourceFile, destFile)
+        // Copy the executable to the tmp directory
+        const sourceFile = os() === 'windows' ? 'dist/Dampfer.exe' : 'dist/Dampfer'
+        const destFile = path.join(tmpDir, path.basename(sourceFile))
+        fs.copyFileSync(sourceFile, destFile)
 
-    // Execute the copied executable
-    info('---------------------------------------------------------------------------------------')
-    const exitCode = os() === 'windows'
-        ? await spawn('cmd.exe', ['/C', `cd ${tmpDir} && "${destFile}"`])
-        : await spawn('sh', ['-c', `cd ${tmpDir} && ./${path.basename(sourceFile)}`])
+        // Execute the copied executable
+        info('---------------------------------------------------------------------------------------')
+        const exitCode = os() === 'windows'
+            ? await spawn('cmd.exe', ['/C', `cd ${tmpDir} && "${destFile}"`])
+            : await spawn('sh', ['-c', `cd ${tmpDir} && ./${path.basename(sourceFile)}`])
 
-    return exit(exitCode)
+        // Keep alive for RecompileGo agent
+    })
 }
