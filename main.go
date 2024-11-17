@@ -25,3 +25,5 @@ func main() {
 	// Start Server
 	web.StartServer()
 }
+
+// TODO: Most endpoints don't have corresponding docker.Function handler atm
