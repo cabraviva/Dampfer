@@ -27,4 +27,6 @@ func main() {
 	web.StartServer()
 }
 
-// TODO: Most endpoints don't have corresponding docker.Function handler atm
+// TODO: Protect API by user auth
+// TODO: Implement Login in frontend
+// TODO: User Creation UI
