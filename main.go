@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"Dampfer/docker"
 	"Dampfer/utils"
 	"Dampfer/web"
 )
@@ -14,7 +15,7 @@ func main() {
 	utils.InitLogger()
 
 	// Check if Docker is installed and log result
-	utils.DoStartupInstallChecks()
+	docker.DoStartupInstallChecks()
 
 	// Init HTTP Server
 	web.InitServer(svelteFS)

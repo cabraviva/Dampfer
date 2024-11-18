@@ -7,6 +7,6 @@ import (
 )
 
 func DockerReady(w http.ResponseWriter, r *http.Request) {
-	response := docker.DockerReady()
+	response := docker.IsReady()
 	json.NewEncoder(w).Encode(response)
 }
