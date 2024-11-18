@@ -41,7 +41,7 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
     // Build for Linux
     info('Building Linux executable...')
     let linuxExitCode = await spawn('go', ['build', '-tags', 'dev', '-o', path.join(distDir, 'Dampfer')], true, {
-        env: { ...process.env, GOOS: 'linux', GOARCH: 'amd64' }
+        env: { ...process.env, GOOS: 'linux', GOARCH: 'amd64', CGO_ENABLED: 1 }
     })
     if (linuxExitCode !== 0) {
         return error('Failed to build Linux executable')

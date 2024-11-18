@@ -59,9 +59,9 @@ func IsReady() DockerReadyStatus {
 	var msg string
 
 	if dockerInstalled && daemonRunning && composeInstalled {
-		msg = "Docker and Compose is installed and running!"
+		msg = "Docker and Compose are installed and running!"
 	} else if dockerInstalled && composeInstalled && !daemonRunning {
-		msg = "Docker and Compose is installed but Docker Daemon is not running. Make sure docker is configured to start with the system!"
+		msg = "Docker and Compose are installed but Docker Daemon is not running. Make sure docker is configured to start with the system!"
 	} else if dockerInstalled && !composeInstalled && daemonRunning {
 		msg = "Docker is installed and running, but Dampfer wasn't able to find Compose on your system. Make sure you have either" +
 			" \"docker-compose\" or \"docker compose\" installed and added to PATH!"

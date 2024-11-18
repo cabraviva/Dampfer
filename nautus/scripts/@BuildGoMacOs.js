@@ -42,7 +42,7 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
     for (const arch of ['amd64', 'arm', 'arm32']) {
         info(`Building MacOS executable for ${arch}...`)
         let MacOSExitCode = await spawn('go', ['build', '-o', path.join(distDir, `Dampfer-darwin-${arch}`)], true, {
-            env: { ...process.env, GOOS: 'darwin', GOARCH: arch }
+            env: { ...process.env, GOOS: 'darwin', GOARCH: arch, CGO_ENABLED: 1 }
         })
         if (MacOSExitCode !== 0) {
             return error(`Failed to build MacOS executable for ${arch}`)

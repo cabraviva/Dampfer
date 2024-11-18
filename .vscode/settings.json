@@ -19,6 +19,7 @@
         "README.md": true
     },
     "cSpell.words": [
+        "mattn",
         "sirupsen",
         "trunc"
     ],
@@ -64,7 +65,8 @@
                     "web/",
                     ".gitignore",
                     ".gitattributes",
-                    "README.md"
+                    "README.md",
+                    "Dampfer.db"
                 ]
             }
         ]
