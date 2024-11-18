@@ -12,22 +12,30 @@ func DoStartupInstallChecks() {
 	if readyStatus.Installed {
 		utils.Log.Info("Docker installation status: Installed")
 	} else {
-		utils.Log.Error("Docker installation status: Not installed - " + readyStatus.Msg)
+		utils.Log.Error("Docker installation status: Not installed")
 	}
 
 	// Check if Docker daemon is running and log result
 	if readyStatus.DaemonRunning {
 		utils.Log.Info("Docker daemon status: Running")
 	} else {
-		utils.Log.Error("Docker daemon status: Not running - " + readyStatus.Msg)
+		utils.Log.Error("Docker daemon status: Not running")
 	}
 
 	// Check if Docker Compose is installed and log result
 	if readyStatus.DaemonRunning {
 		utils.Log.Info("Docker Compose installation status: Installed; Version: " + readyStatus.ComposeVersion)
 	} else {
-		utils.Log.Error("Docker Compose installation status: Not installed - " + readyStatus.Msg)
+		utils.Log.Error("Docker Compose installation status: Not installed")
 	}
+
+	// Log Msg
+	if readyStatus.Ready {
+		utils.Log.Info("Install status: " + readyStatus.Msg)
+	} else {
+		utils.Log.Error("Install status: " + readyStatus.Msg)
+	}
+
 }
 
 // dockerInstalled checks if Docker is installed on the system by running a version check

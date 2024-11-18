@@ -34,9 +34,9 @@ func IsComposeV2Installed() bool {
 func GetComposeVersion() ComposeVersion {
 	// Prefer v2
 	if IsComposeV2Installed() {
-		return ComposeVersionV1
-	} else if IsComposeV1Installed() {
 		return ComposeVersionV2
+	} else if IsComposeV1Installed() {
+		return ComposeVersionV1
 	} else {
 		return ComposeVersionNotFound
 	}
