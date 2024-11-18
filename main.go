@@ -7,6 +7,8 @@ import (
 	"Dampfer/docker"
 	"Dampfer/utils"
 	"Dampfer/web"
+
+	_ "Dampfer/database" // Import to init db
 )
 
 var svelteFS http.Handler // Shared across dev.go and prod.go

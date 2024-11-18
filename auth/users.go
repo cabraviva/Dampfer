@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"Dampfer/database"
 	"Dampfer/utils"
 	"database/sql"
 	"errors"
@@ -9,7 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var users_db *sql.DB
+var db = database.DB
 
 // Permission types
 const (
@@ -17,28 +18,6 @@ const (
 	Admin       = "admin"
 	Insight     = "insight"
 )
-
-// Initialize the database connection and create the users table if it doesn't exist
-func init() {
-	var err error
-
-	users_db, err = sql.Open("sqlite3", "./Dampfer.db")
-	if err != nil {
-		utils.Log.Panic("Failed to open database: ", err)
-		panic(err)
-	}
-
-	// Create the users table with permissions
-	_, err = users_db.Exec(`CREATE TABLE IF NOT EXISTS users (
-        username TEXT PRIMARY KEY,
-        password_hash TEXT NOT NULL,
-        permission TEXT NOT NULL CHECK (permission IN ('system-admin', 'admin', 'insight'))
-    )`)
-	if err != nil {
-		utils.Log.Panic("Failed to create users table: ", err)
-		panic(err)
-	}
-}
 
 // hashPassword hashes a plaintext password using bcrypt
 func hashPassword(password string) (string, error) {
@@ -72,7 +51,7 @@ func CreateUser(username, password, permission string) error {
 		return err
 	}
 
-	_, err = users_db.Exec(`INSERT INTO users (username, password_hash, permission) VALUES (?, ?, ?)`,
+	_, err = db.Exec(`INSERT INTO users (username, password_hash, permission) VALUES (?, ?, ?)`,
 		username, hashedPassword, permission)
 	if err != nil {
 		utils.Log.Error("Failed to create user: ", err)
@@ -85,7 +64,7 @@ func CreateUser(username, password, permission string) error {
 
 // DeleteUser removes a user from the database
 func DeleteUser(username string) error {
-	_, err := users_db.Exec(`DELETE FROM users WHERE username = ?`, username)
+	_, err := db.Exec(`DELETE FROM users WHERE username = ?`, username)
 	if err != nil {
 		utils.Log.Error("Failed to delete user: ", err)
 		return err
@@ -98,7 +77,7 @@ func DeleteUser(username string) error {
 // VerifyPassword checks if the given password matches the stored hash for the user
 func VerifyPassword(username, password string) (bool, error) {
 	var hashedPassword string
-	err := users_db.QueryRow(`SELECT password_hash FROM users WHERE username = ?`, username).Scan(&hashedPassword)
+	err := db.QueryRow(`SELECT password_hash FROM users WHERE username = ?`, username).Scan(&hashedPassword)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			utils.Log.Warn("User not found: ", username)
@@ -118,7 +97,7 @@ func ChangePassword(username, newPassword string) error {
 		return err
 	}
 
-	_, err = users_db.Exec(`UPDATE users SET password_hash = ? WHERE username = ?`, hashedPassword, username)
+	_, err = db.Exec(`UPDATE users SET password_hash = ? WHERE username = ?`, hashedPassword, username)
 	if err != nil {
 		utils.Log.Error("Failed to change password: ", err)
 		return err
@@ -136,7 +115,7 @@ func SetPermission(username, permission string) error {
 		return err
 	}
 
-	_, err := users_db.Exec(`UPDATE users SET permission = ? WHERE username = ?`, permission, username)
+	_, err := db.Exec(`UPDATE users SET permission = ? WHERE username = ?`, permission, username)
 	if err != nil {
 		utils.Log.Error("Failed to set permission: ", err)
 		return err
@@ -148,7 +127,7 @@ func SetPermission(username, permission string) error {
 
 // ListUsers returns all users and their permissions
 func ListUsers() ([]map[string]string, error) {
-	rows, err := users_db.Query(`SELECT username, permission FROM users`)
+	rows, err := db.Query(`SELECT username, permission FROM users`)
 	if err != nil {
 		utils.Log.Error("Failed to list users: ", err)
 		return nil, err
@@ -172,7 +151,7 @@ func ListUsers() ([]map[string]string, error) {
 // GetPermission returns the permission of a given user
 func GetPermission(username string) (string, error) {
 	var permission string
-	err := users_db.QueryRow(`SELECT permission FROM users WHERE username = ?`, username).Scan(&permission)
+	err := db.QueryRow(`SELECT permission FROM users WHERE username = ?`, username).Scan(&permission)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			utils.Log.Warn("User not found: ", username)
