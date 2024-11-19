@@ -26,24 +26,11 @@ func main() {
 	// Register API endpoints
 	web.RegisterEndpoints()
 
+	// Create default user named "admin" with password "admin" with system-admin permissions if no other users exist
+	auth.CreateDefaultUserIfNecessary()
+
 	// Start Server
 	go web.StartServer()
-
-	// Create default user named "admin" with password "admin" with system-admin permissions if no other users exist
-	users, err := auth.ListUsers()
-	if err != nil {
-		utils.Log.Error(err)
-		utils.Log.Panic("Could not access users, so wasn't able to check for default user!")
-		panic(err)
-	}
-
-	if len(users) == 0 {
-		// No users created (yet), create default user:
-		auth.CreateUser("admin", "admin", auth.SystemAdmin)
-		utils.Log.Info("Successfully created new default user 'admin' with the password 'admin'!")
-	} else {
-		utils.Log.Info("No need to create new default user, as at least one user already exists!")
-	}
 }
 
 // TODO: Protect API by user auth

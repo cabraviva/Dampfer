@@ -179,3 +179,37 @@ func HasPermission(username, permission string) (bool, error) {
 func isValidPermission(permission string) bool {
 	return permission == SystemAdmin || permission == Admin || permission == Insight
 }
+
+func CreateDefaultUserIfNecessary() {
+	// Create default user named "admin" with password "admin" with system-admin permissions if no other users exist
+	users, err := ListUsers()
+	if err != nil {
+		utils.Log.Error(err)
+		utils.Log.Panic("Could not access users, so wasn't able to check for default user!")
+		panic(err)
+	}
+
+	if len(users) == 0 {
+		// No users created (yet), create default user:
+		CreateUser("admin", "admin", SystemAdmin)
+		utils.Log.Info("Successfully created new default user 'admin' with the password 'admin'!")
+	} else {
+		// Make sure at least one user has system-admin permissions, else create default user
+
+		foundSysAdmin := false
+
+		for i := 0; i < len(users); i++ {
+			currentUser := users[i]
+			if currentUser["permission"] == SystemAdmin {
+				foundSysAdmin = true
+			}
+		}
+
+		if foundSysAdmin {
+			utils.Log.Info("No need to create new default user, as at least one user with system-admin permissions already exists!")
+		} else {
+			CreateUser("admin", "admin", SystemAdmin)
+			utils.Log.Info("Successfully created new default user 'admin' with the password 'admin' because no user with system-admin permissions was found!")
+		}
+	}
+}

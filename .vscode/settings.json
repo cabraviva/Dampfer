@@ -4,7 +4,19 @@
         "**/.svn": true,
         "**/.hg": true,
         "**/CVS": true,
-        "**/.DS_Store": true
+        "**/.DS_Store": true,
+        ".vscode/": true,
+        "nautus/": true,
+        "tmp/": true,
+        "go.sum": true,
+        "*.pdf": true,
+        "*.svg": true,
+        "LICENSE": true,
+        "dist/": true,
+        ".gitignore": true,
+        ".gitattributes": true,
+        "svelte/": true,
+        "README.md": true
     },
     "cSpell.words": [
         "mattn",
@@ -59,5 +71,5 @@
             }
         ]
     },
-    "hidefiles.selectedProfile": "Show All Files"
+    "hidefiles.selectedProfile": "Go"
 }
