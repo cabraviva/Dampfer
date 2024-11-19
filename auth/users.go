@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"Dampfer/database"
 	"Dampfer/utils"
 	"database/sql"
 	"errors"
@@ -10,8 +9,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
-
-var db = database.DB
 
 // Permission types
 const (

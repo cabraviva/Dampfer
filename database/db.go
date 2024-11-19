@@ -42,6 +42,7 @@ func init() {
 
 	// Create the necessary tables
 	createUserTable()
+	createAuthTable()
 }
 
 // createUserTable creates the users table if it doesn't already exist
@@ -55,6 +56,19 @@ func createUserTable() {
 	_, err := DB.Exec(query)
 	if err != nil {
 		utils.Log.Panic("Failed to create users table: ", err)
+		panic(err)
+	}
+}
+
+// Creates table that stores jwt secret
+func createAuthTable() {
+	query := `CREATE TABLE IF NOT EXISTS auth (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        secret_key BLOB NOT NULL
+    )`
+	_, err := DB.Exec(query)
+	if err != nil {
+		utils.Log.Panic("Failed to create auth table: ", err)
 		panic(err)
 	}
 }
