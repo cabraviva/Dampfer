@@ -7,7 +7,6 @@ import (
 
 func InitServer(svelteFS http.Handler) {
 	// Serve embedded files as an HTTP file system
-	// svelteFS := http.FileServer(http.Dir("svelte/dist"))
 	http.Handle("/", svelteFS)
 }
 

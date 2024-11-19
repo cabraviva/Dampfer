@@ -36,6 +36,7 @@ module.exports = (cmd, os, info, warn, error, exit, script, spawn, modules, node
         const sourceFile = os() === 'windows' ? 'dist/Dampfer.exe' : 'dist/Dampfer'
         const destFile = path.join(tmpDir, path.basename(sourceFile))
         fs.copyFileSync(sourceFile, destFile)
+        fs.rmSync(sourceFile)
 
         // Execute the copied executable
         info('---------------------------------------------------------------------------------------')

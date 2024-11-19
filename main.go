@@ -1,18 +1,28 @@
 package main
 
 import (
-	"net/http"
-
-	"Dampfer/docker"
+	"Dampfer/auth"
+	"Dampfer/docker" // Import the restartCrash package
 	"Dampfer/utils"
 	"Dampfer/web"
+
+	_ "Dampfer/database" // Necessary to init database
+	"net/http"
 )
 
 var svelteFS http.Handler // Shared across dev.go and prod.go
 
+var isDEV bool // Set by dev.go or prod.go
+
 func main() {
 	// Logging
 	utils.InitLogger()
+
+	if isDEV {
+		utils.Log.Warn("Using DEVELOPMENT mode. All files will be served from the local FS and aren't embedded.")
+	} else {
+		utils.Log.Info("Starting in PRODUCTION mode. Webserver will be using embedded files. That's a good sign 👍")
+	}
 
 	// Check if Docker is installed and log result
 	docker.DoStartupInstallChecks()
@@ -23,10 +33,9 @@ func main() {
 	// Register API endpoints
 	web.RegisterEndpoints()
 
-	// Start Server
-	web.StartServer()
-}
+	// Create default user named "admin" with password "admin" with system-admin permissions if no other users exist
+	auth.CreateDefaultUserIfNecessary()
 
-// TODO: Protect API by user auth
-// TODO: Implement Login in frontend
-// TODO: User Creation UI
+	// Start Server
+	go web.StartServer()
+}

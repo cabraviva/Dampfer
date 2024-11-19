@@ -8,4 +8,5 @@ import (
 
 func init() {
 	svelteFS = http.FileServer(http.Dir("svelte/dist"))
+	isDEV = true
 }

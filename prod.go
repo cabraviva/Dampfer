@@ -14,4 +14,5 @@ var embeddedFiles embed.FS
 func init() {
 	svelteFiles, _ := fs.Sub(embeddedFiles, "svelte/dist")
 	svelteFS = http.FileServer(http.FS(svelteFiles))
+	isDEV = false
 }

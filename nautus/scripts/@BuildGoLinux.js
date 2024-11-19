@@ -42,7 +42,7 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
     for (const arch of ['amd64', 'arm', 'arm32']) {
         info(`Building Linux executable for ${arch}...`)
         let linuxExitCode = await spawn('go', ['build', '-o', path.join(distDir, `Dampfer-linux-${arch}`)], true, {
-            env: { ...process.env, GOOS: 'linux', GOARCH: arch }
+            env: { ...process.env, GOOS: 'linux', GOARCH: arch, CGO_ENABLED: 1 }
         })
         if (linuxExitCode !== 0) {
             return error(`Failed to build Linux executable for ${arch}`)
