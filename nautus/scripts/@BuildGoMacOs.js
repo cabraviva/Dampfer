@@ -3,7 +3,7 @@ This file is used to define what happens when you use 'nautus build'
 You can write this script like every normal node.js app, but are also
 able to use special functions defined below:
 async cmd(command: string): Promise<[exitCode, stdout]> - Execute a command in the default shell and waits until completion. Returns [exitCode, stdout]
-os(): string - Returns 'windows', 'linux, 'mac' or 'unknown'
+os(): string - Returns 'windows', 'MacOS, 'mac' or 'unknown'
 info(what: any): void - Displays an info in the console
 warn(what: any): void - Displays a warning in the console
 error(what: any): void - Displays an error in the console & exits with code 1
@@ -22,17 +22,34 @@ Over time we might add more (just check using info(modules)), but right now it's
 */
 
 module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules, nodeBin) => {
-    // Edit this file for preparation before run
     /*
-        If you use Svelte, for example, you might need to compile your files before
-        running. In that case you could do this:
+        Here you can be creative. If you want to build your project using pkg you could use:
+        exit(await spawn('pkg', ['.']))
 
-        await cmd('rollup -c')
+        But maybe you need to move a file before:
+        await cmd('mv x.js y.js')
+        exit(await spawn('pkg', ['.']))
     */
 
-    //await script('BuildSvelte')
+    // Ensure dist directory exists
+    const { fs, path } = modules
+    const distDir = path.join(process.cwd(), 'dist')
+    if (!fs.existsSync(distDir)) {
+        fs.mkdirSync(distDir)
+    }
 
-    os() === 'windows' ? await script('BuildGoWinDev') : await script('BuildGoLinuxDev')
+    // Build for Darwin
+    for (const arch of ['amd64', 'arm', 'arm32']) {
+        info(`Building MacOS executable for ${arch}...`)
+        let MacOSExitCode = await spawn('go', ['build', '-o', path.join(distDir, `Dampfer-darwin-${arch}`)], true, {
+            env: { ...process.env, GOOS: 'darwin', GOARCH: arch, CGO_ENABLED: 1 }
+        })
+        if (MacOSExitCode !== 0) {
+            return error(`Failed to build MacOS executable for ${arch}`)
+        }
+
+        info(`Build completed successfully for darwin-${arch}`)
+    }
 
     /* PLEASE DON'T CHANGE METHOD NAMES, AS IT MIGHT BE REQUIRED BY RUNTIMES */
     /* PLEASE DON'T DELETE OR MODIFY THIS COMMENT, IT WILL BE USED TO INJECT SCRIPTS BY KELP */

@@ -22,18 +22,27 @@ Over time we might add more (just check using info(modules)), but right now it's
 */
 
 module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules, nodeBin) => {
-    // Edit this file for preparation before run
-    /*
-        If you use Svelte, for example, you might need to compile your files before
-        running. In that case you could do this:
+    await script('Build')
 
-        await cmd('rollup -c')
-    */
+    const { fs, path } = modules
+    const tmpDir = path.join(process.cwd(), 'tmp')
 
-    //await script('BuildSvelte')
+    // Clean up the tmp directory if it already exists, then create it
+    if (fs.existsSync(tmpDir)) {
+        fs.rmSync(tmpDir, { recursive: true })
+    }
+    fs.mkdirSync(tmpDir)
 
-    os() === 'windows' ? await script('BuildGoWinDev') : await script('BuildGoLinuxDev')
+    // Copy the executable to the tmp directory
+    const sourceFile = os() === 'windows' ? 'dist/Dampfer.exe' : 'dist/Dampfer'
+    const destFile = path.join(tmpDir, path.basename(sourceFile))
+    fs.copyFileSync(sourceFile, destFile)
 
-    /* PLEASE DON'T CHANGE METHOD NAMES, AS IT MIGHT BE REQUIRED BY RUNTIMES */
-    /* PLEASE DON'T DELETE OR MODIFY THIS COMMENT, IT WILL BE USED TO INJECT SCRIPTS BY KELP */
+    // Execute the copied executable
+    info('---------------------------------------------------------------------------------------')
+    const exitCode = os() === 'windows'
+        ? await spawn('cmd.exe', ['/C', `cd ${tmpDir} && "${destFile}"`])
+        : await spawn('sh', ['-c', `cd ${tmpDir} && ./${path.basename(sourceFile)}`])
+
+    return exit(exitCode)
 }

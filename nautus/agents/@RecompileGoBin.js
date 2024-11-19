@@ -22,18 +22,20 @@ Over time we might add more (just check using info(modules)), but right now it's
 */
 
 module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules, nodeBin) => {
-    // Edit this file for preparation before run
-    /*
-        If you use Svelte, for example, you might need to compile your files before
-        running. In that case you could do this:
 
-        await cmd('rollup -c')
-    */
+    // This is an agent, define commands to be run if the in
+    // agents.yaml specified tank content changes here!
 
-    //await script('BuildSvelte')
+    info('-!-!-!- RECOMPILING GO EXECUTABLE -!-!-!-')
 
+    // Kill every running Dampfer instance
+    const killcmd = os() === 'windows' ? `for /f "tokens=2" %i in ('tasklist ^| findstr "Dampfer"') do taskkill /PID %i /F` : `kill -9 $(ps aux | grep '[D]ampfer' | awk '{print $2}')`
+    info((await cmd(killcmd))[0] === 0 ? 'Succesfully killed running Dampfer instances' : 'Could not kill Dampfer instances. Might want to check your os or the nautus script!')
+
+    // Build executable
     os() === 'windows' ? await script('BuildGoWinDev') : await script('BuildGoLinuxDev')
 
-    /* PLEASE DON'T CHANGE METHOD NAMES, AS IT MIGHT BE REQUIRED BY RUNTIMES */
-    /* PLEASE DON'T DELETE OR MODIFY THIS COMMENT, IT WILL BE USED TO INJECT SCRIPTS BY KELP */
+    // Run executable
+    await script('Run')
+
 }

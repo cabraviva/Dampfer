@@ -22,17 +22,32 @@ Over time we might add more (just check using info(modules)), but right now it's
 */
 
 module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules, nodeBin) => {
-    // Edit this file for preparation before run
     /*
-        If you use Svelte, for example, you might need to compile your files before
-        running. In that case you could do this:
+        Here you can be creative. If you want to build your project using pkg you could use:
+        exit(await spawn('pkg', ['.']))
 
-        await cmd('rollup -c')
+        But maybe you need to move a file before:
+        await cmd('mv x.js y.js')
+        exit(await spawn('pkg', ['.']))
     */
 
-    //await script('BuildSvelte')
+    // Ensure dist directory exists
+    const { fs, path } = modules
+    const distDir = path.join(process.cwd(), 'dist')
+    if (!fs.existsSync(distDir)) {
+        fs.mkdirSync(distDir)
+    }
 
-    os() === 'windows' ? await script('BuildGoWinDev') : await script('BuildGoLinuxDev')
+    // Build for Windows
+    info('Building Windows executable...')
+    let winExitCode = await spawn('go', ['build', '-o', path.join(distDir, 'Dampfer-win-amd64.exe')], true, {
+        env: { ...process.env, GOOS: 'windows', GOARCH: 'amd64', CGO_ENABLED: 1 }
+    })
+    if (winExitCode !== 0) {
+        return error('Failed to build Windows executable')
+    }
+
+    info('Build completed successfully for Windows')
 
     /* PLEASE DON'T CHANGE METHOD NAMES, AS IT MIGHT BE REQUIRED BY RUNTIMES */
     /* PLEASE DON'T DELETE OR MODIFY THIS COMMENT, IT WILL BE USED TO INJECT SCRIPTS BY KELP */
