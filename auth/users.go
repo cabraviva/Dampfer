@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -191,8 +192,17 @@ func CreateDefaultUserIfNecessary() {
 
 	if len(users) == 0 {
 		// No users created (yet), create default user:
-		CreateUser("admin", "admin", SystemAdmin)
-		utils.Log.Info("Successfully created new default user 'admin' with the password 'admin'!")
+		err := CreateUser("admin", "admin", SystemAdmin)
+		if err == nil {
+			utils.Log.Info("Successfully created new default user 'admin' with the password 'admin'!")
+		} else {
+			utils.Log.Error("Could not create default user with name 'admin', will try to create a user based on uuid!")
+			defaultUsername := "admin-" + uuid.NewString()
+			err := CreateUser(defaultUsername, "admin", SystemAdmin)
+			if err == nil {
+				utils.Log.Info("Successfully created new default user '" + defaultUsername + "' with the password 'admin'!")
+			}
+		}
 	} else {
 		// Make sure at least one user has system-admin permissions, else create default user
 
@@ -208,8 +218,17 @@ func CreateDefaultUserIfNecessary() {
 		if foundSysAdmin {
 			utils.Log.Info("No need to create new default user, as at least one user with system-admin permissions already exists!")
 		} else {
-			CreateUser("admin", "admin", SystemAdmin)
-			utils.Log.Info("Successfully created new default user 'admin' with the password 'admin' because no user with system-admin permissions was found!")
+			err := CreateUser("admin", "admin", SystemAdmin)
+			if err == nil {
+				utils.Log.Info("Successfully created new default user 'admin' with the password 'admin' because no user with system-admin permissions was found!")
+			} else {
+				utils.Log.Error("Could not create default user with name 'admin', will try to create a user based on uuid!")
+				defaultUsername := "admin-" + uuid.NewString()
+				err := CreateUser(defaultUsername, "admin", SystemAdmin)
+				if err == nil {
+					utils.Log.Info("Successfully created new default user '" + defaultUsername + "' with the password 'admin' because no user with system-admin permissions was found!")
+				}
+			}
 		}
 	}
 }
