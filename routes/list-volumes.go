@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func ListVolumes(w http.ResponseWriter, r *http.Request) {
+func ListVolumes(w http.ResponseWriter, r *http.Request, username string) {
 	volumes, err := docker.ListVolumes()
 
 	if err != nil {

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func DockerReady(w http.ResponseWriter, r *http.Request) {
+func DockerReady(w http.ResponseWriter, r *http.Request, username string) {
 	response := docker.IsReady()
 	json.NewEncoder(w).Encode(response)
 }

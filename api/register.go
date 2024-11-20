@@ -1,6 +1,7 @@
 package api
 
 import (
+	"Dampfer/auth"
 	"fmt"
 	"net/http"
 )
@@ -10,7 +11,8 @@ var RegisteredEndpoints []string
 
 // registerAPI registers an API endpoint with a specific function and allowed method,
 // and adds it to the list of endpoints for listing at /api/endpoints.
-func Register(path string, handler func(http.ResponseWriter, *http.Request), method string) {
+// Leave minimumPermission empty ("") if no permission is required
+func Register(path string, handler func(http.ResponseWriter, *http.Request, string), method string, requiresAuth bool, minimumPermission string) {
 	// Record the endpoint in the format "METHOD /path"
 	RegisteredEndpoints = append(RegisteredEndpoints, fmt.Sprintf("%s %s", method, path))
 
@@ -19,7 +21,21 @@ func Register(path string, handler func(http.ResponseWriter, *http.Request), met
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		w.Header().Set("Content-Type", "application/json")
-		handler(w, r)
+
+		if requiresAuth {
+			if isAuthorized, errMsg, username := auth.IsRequestAuthorized(w, r, minimumPermission); isAuthorized {
+				w.Header().Set("Content-Type", "application/json")
+				handler(w, r, username)
+			} else {
+				if errMsg == "" {
+					errMsg = "Unauthorized"
+				}
+				http.Error(w, errMsg, http.StatusUnauthorized)
+				return
+			}
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			handler(w, r, "")
+		}
 	})
 }

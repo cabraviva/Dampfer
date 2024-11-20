@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -45,4 +46,11 @@ func InitLogger() {
 
 	// Use io.MultiWriter to write logs to both the console and the log file
 	Log.SetOutput(io.MultiWriter(os.Stdout, logFile))
+}
+
+func NewLoggingSession() {
+	Log.Info("-----------------------------------------------------------------")
+	Log.Info("    Starting New Logging Session at:")
+	Log.Info("    ", time.Now().Local().Format(time.Stamp))
+	Log.Info("-----------------------------------------------------------------")
 }
