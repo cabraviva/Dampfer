@@ -19,6 +19,7 @@
         "README.md": true
     },
     "cSpell.words": [
+        "jwtoken",
         "mattn",
         "sirupsen",
         "trunc"

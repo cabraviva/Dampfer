@@ -1,9 +1,10 @@
 package main
 
 import (
+	"Dampfer/utils" // Has to be on top for init
+
 	"Dampfer/auth"
 	"Dampfer/docker" // Import the restartCrash package
-	"Dampfer/utils"
 	"Dampfer/web"
 
 	_ "Dampfer/database" // Necessary to init database
@@ -15,9 +16,6 @@ var svelteFS http.Handler // Shared across dev.go and prod.go
 var isDEV bool // Set by dev.go or prod.go
 
 func main() {
-	// Logging
-	utils.InitLogger()
-
 	if isDEV {
 		utils.Log.Warn("Using DEVELOPMENT mode. All files will be served from the local FS and aren't embedded.")
 	} else {
@@ -38,4 +36,6 @@ func main() {
 
 	// Start Server
 	go web.StartServer()
+
+	select {} // Keep main thread alive
 }
