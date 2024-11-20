@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func ListImages(w http.ResponseWriter, r *http.Request) {
+func ListImages(w http.ResponseWriter, r *http.Request, username string) {
 	images, err := docker.ListImages()
 
 	if err != nil {

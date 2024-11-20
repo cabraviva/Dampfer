@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func ListAllContainers(w http.ResponseWriter, r *http.Request) {
+func ListAllContainers(w http.ResponseWriter, r *http.Request, username string) {
 	containers, err := docker.ListAllContainers()
 
 	if err != nil {
