@@ -9,50 +9,6 @@ type DockerReadyStatus struct {
 	Msg              string
 }
 
-// dockerReady checks if Docker is installed and if the daemon is running
-// func DockerReady() DockerReadyStatus {
-// 	installed, installMsg := DockerInstalled()
-// 	if !installed {
-// 		return DockerReadyStatus{
-// 			Ready:            false,
-// 			Installed:        false,
-// 			DaemonRunning:    false,
-// 			ComposeInstalled: false,
-// 			Msg:              installMsg,
-// 		}
-// 	}
-
-// 	daemonRunning, daemonMsg := DockerDaemonRunning()
-// 	if !daemonRunning {
-// 		return DockerReadyStatus{
-// 			Ready:            false,
-// 			Installed:        true,
-// 			DaemonRunning:    false,
-// 			ComposeInstalled: false,
-// 			Msg:              daemonMsg,
-// 		}
-// 	}
-
-// 	composeInstalled := IsComposeInstalled()
-// 	if !composeInstalled {
-// 		return DockerReadyStatus{
-// 			Ready:            false,
-// 			Installed:        true,
-// 			DaemonRunning:    true,
-// 			ComposeInstalled: false,
-// 			Msg:              "docker-compose or docker compose was not found in path or is not installed on your system!",
-// 		}
-// 	}
-
-// 	return DockerReadyStatus{
-// 		Ready:            true,
-// 		Installed:        true,
-// 		DaemonRunning:    true,
-// 		ComposeInstalled: true,
-// 		Msg:              "Docker and Docker Compose are ready and running",
-// 	}
-// }
-
 func IsReady() DockerReadyStatus {
 	dockerInstalled, daemonRunning, composeInstalled, composeVersion := IsDockerInstalled(), IsDockerDaemonRunning(), IsComposeInstalled(), GetComposeVersion()
 

@@ -1,3 +1,5 @@
+$sideBarWidth: 15vw;
+
 @font-face {
   font-family: 'OpenSans';
   src: url('/OpenSans.ttf') format('truetype');
@@ -7,10 +9,29 @@
 
 :root, body {
   font-size: 1vw;
+  overflow: hidden;
 }
 
 * {
   margin: 0;
   padding: 0;
   font-family: 'OpenSans', sans-serif;
+}
+
+.sidebar {
+  position: fixed;
+  z-index: 11;
+  top: 0;
+  left: 0;
+  width: $sideBarWidth;
+  height: 100vh;
+}
+
+.page {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  width: 100vw - $sideBarWidth;
+  height: 100vh;
 }

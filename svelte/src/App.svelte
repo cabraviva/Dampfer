@@ -1,16 +1,20 @@
 <script lang="ts">
   import "./app.css";
-  import { Button } from "flowbite-svelte";
-
   import LoginCheck from "./popups/LoginCheck.svelte";
+  import Sidebar from "./Sidebar.svelte";
+  import Page from "./Page.svelte";
+
+  let pageId = $state("home");
+
+  function updatePage(newpageid: string) {
+    pageId = newpageid;
+  }
 </script>
 
 <main>
   <LoginCheck />
 
-  <h1>Dampfer</h1>
-  <Button>Test</Button>
-</main>
+  <Sidebar className="sidebar" pageid={pageId} {updatePage} />
 
-<style>
-</style>
+  <Page className="page" pageid={pageId} />
+</main>
