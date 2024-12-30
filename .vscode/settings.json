@@ -4,7 +4,24 @@
         "**/.svn": true,
         "**/.hg": true,
         "**/CVS": true,
-        "**/.DS_Store": true
+        "**/.DS_Store": true,
+        ".vscode/": true,
+        "nautus/": true,
+        "tmp/": true,
+        "go.sum": true,
+        "LICENSE": true,
+        "*.go": true,
+        "go.mod": true,
+        "api/": true,
+        "dist/": true,
+        "docker/": true,
+        "routes/": true,
+        "utils/": true,
+        "web/": true,
+        ".gitignore": true,
+        ".gitattributes": true,
+        "README.md": true,
+        "Dampfer.db": true
     },
     "cSpell.words": [
         "jwtoken",
@@ -60,5 +77,5 @@
             }
         ]
     },
-    "hidefiles.selectedProfile": "Show All Files"
+    "hidefiles.selectedProfile": "Svelte"
 }

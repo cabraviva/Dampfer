@@ -34,7 +34,7 @@ module.exports = async (cmd, os, info, warn, error, exit, script, spawn, modules
     fs.mkdirSync(tmpDir)
 
     // Copy the executable to the tmp directory
-    const sourceFile = os() === 'windows' ? 'dist/Dampfer.exe' : 'dist/Dampfer'
+    const sourceFile = os() === 'windows' ? 'dist/Dampfer-win-amd64.exe' : 'dist/Dampfer-linux-amd64'
     const destFile = path.join(tmpDir, path.basename(sourceFile))
     fs.copyFileSync(sourceFile, destFile)
 
