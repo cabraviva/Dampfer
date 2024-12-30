@@ -17,6 +17,9 @@
   import { Particle } from "jparticles";
   import { Input, Label } from "flowbite-svelte";
   import logo from "../../public/logo.svg";
+  import Fa from "svelte-fa";
+  import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+  import { Button } from "flowbite-svelte";
 
   onMount(() => {
     new Particle("#animated-bg-login", {
@@ -47,5 +50,7 @@
       <Label for="password" class="mb-2">Password</Label>
       <Input type="password" id="password" placeholder="•••••••••" required />
     </div>
+
+    <Button class="mt-2">Submit <Fa class="ml-2" icon={faArrowRight} /></Button>
   </div>
 </div>

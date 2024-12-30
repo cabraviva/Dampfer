@@ -24,9 +24,12 @@
     "vite": "^5.4.10"
   },
   "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@types/p5": "^1.7.6",
     "jparticles": "^3.5.0",
     "knorry": "^1.0.0",
-    "p5": "^1.11.2"
+    "p5": "^1.11.2",
+    "svelte-fa": "^4.0.3"
   }
 }
