@@ -11,6 +11,7 @@ func RegisterEndpoints() {
 	api.Register("/api/endpoints", api.ListEndpoints, http.MethodGet, true, auth.Insight)
 
 	api.Register("/login", routes.Login, http.MethodPost, false, "")
+	api.Register("/api/whoami", routes.Whoami, http.MethodGet, true, auth.Insight)
 
 	api.Register("/api/docker/ready", routes.DockerReady, http.MethodGet, true, auth.Insight)
 	api.Register("/api/docker/container/running/list", routes.ListRunningContainers, http.MethodGet, true, auth.Insight)
