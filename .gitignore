@@ -24,3 +24,5 @@ dist/
 tmp/
 
 Dampfer.db
+
+.vscode/settings.json
