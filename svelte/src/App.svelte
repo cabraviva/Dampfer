@@ -3,8 +3,14 @@
   import LoginCheck from "./popups/LoginCheck.svelte";
   import Sidebar from "./Sidebar.svelte";
   import Page from "./Page.svelte";
+  import type { AlertType } from "./types";
 
   let pageId = $state("home");
+  let alerts: AlertType[] = $state([]);
+
+  function pushAlert(alert: AlertType) {
+    alerts.push(alert);
+  }
 
   function updatePage(newpageid: string) {
     pageId = newpageid;
@@ -14,7 +20,13 @@
 <main>
   <LoginCheck />
 
-  <Sidebar className="sidebar" pageid={pageId} {updatePage} />
+  <Sidebar
+    className="sidebar"
+    pageid={pageId}
+    {updatePage}
+    {alerts}
+    {pushAlert}
+  />
 
   <Page className="page" pageid={pageId} />
 </main>

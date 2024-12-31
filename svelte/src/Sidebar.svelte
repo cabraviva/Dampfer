@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { pageid, className, updatePage } = $props();
+  let { pageid, className, updatePage, alerts, pushAlert } = $props();
   import Fa from "svelte-fa";
 
   import "./app.scss";
@@ -18,6 +18,8 @@
   import { faDocker } from "@fortawesome/free-brands-svg-icons";
   import { whoami } from "./script/whoami";
   import SideBarTabs from "./sidebar/SideBarTabs.svelte";
+  import AlertsTab from "./sidebar/AlertsTab.svelte";
+  import type { AlertType } from "./types";
 </script>
 
 <nav class={className + " sidebar-container"}>
@@ -58,5 +60,5 @@
     {/await}
   </ul>
 
-  <SideBarTabs />
+  <SideBarTabs {alerts} {pushAlert} />
 </nav>

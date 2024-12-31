@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Fa from "svelte-fa";
+  let { alerts, pushAlert } = $props();
 
   import "../app.scss";
   import "../sidebar.scss";
@@ -14,7 +14,7 @@
     <ProfileTab />
   </SideBarTabElement>
   <SideBarTabElement>
-    <AlertsTab />
+    <AlertsTab {alerts} {pushAlert} />
   </SideBarTabElement>
   <SideBarTabElement>
     <AboutTab />
