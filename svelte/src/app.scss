@@ -1,3 +1,10 @@
+$primary: #00D0E9;
+$bg: #102E4A;
+$darkBg: #0c2339;
+$shadow: #071420;
+$white: #F8F7FF;
+$secondary: #43BCCD;
+
 $sideBarWidth: 15vw;
 
 @font-face {
@@ -57,4 +64,15 @@ $sideBarWidth: 15vw;
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #6b6b6b;
+}
+
+// Selection
+::selection {
+  background: $bg;
+  color: $white;
+}
+
+::-moz-selection {
+  background: $bg;
+  color: $white;
 }

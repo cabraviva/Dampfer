@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "../app.css";
+  import "../app.scss";
 
   import { credentialsSaved, isJWTValid } from "../script/login";
   import LoginPage from "./LoginPage.svelte";
