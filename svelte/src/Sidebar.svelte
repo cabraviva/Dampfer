@@ -17,10 +17,12 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { faDocker } from "@fortawesome/free-brands-svg-icons";
   import { whoami } from "./script/whoami";
+  import SideBarTabs from "./sidebar/SideBarTabs.svelte";
 </script>
 
 <nav class={className + " sidebar-container"}>
   <SidebarLogo />
+
   <ul class="sidebar-list">
     <SidebarButton currentPageId={pageid} {updatePage} pageid="home">
       <Fa icon={faHouse} class="mr-3" /> Home
@@ -55,4 +57,6 @@
       {/if}
     {/await}
   </ul>
+
+  <SideBarTabs />
 </nav>

@@ -35,3 +35,26 @@ $sideBarWidth: 15vw;
   width: 100vw - $sideBarWidth;
   height: 100vh;
 }
+
+// Scrollbar
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  width: 0px;
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b8b8b8;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #6b6b6b;
+}
