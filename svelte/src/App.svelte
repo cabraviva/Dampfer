@@ -12,6 +12,10 @@
     alerts.push(alert);
   }
 
+  function setAlerts(array: AlertType[]) {
+    alerts = array;
+  }
+
   function updatePage(newpageid: string) {
     pageId = newpageid;
   }
@@ -26,6 +30,7 @@
     {updatePage}
     {alerts}
     {pushAlert}
+    {setAlerts}
   />
 
   <Page className="page" pageid={pageId} />

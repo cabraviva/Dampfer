@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { alerts, pushAlert } = $props();
+  let { alerts, pushAlert, setAlerts } = $props();
 
   import "../app.scss";
   import "../sidebar.scss";
@@ -14,7 +14,7 @@
     <ProfileTab />
   </SideBarTabElement>
   <SideBarTabElement>
-    <AlertsTab {alerts} {pushAlert} />
+    <AlertsTab {alerts} {pushAlert} {setAlerts} />
   </SideBarTabElement>
   <SideBarTabElement>
     <AboutTab />

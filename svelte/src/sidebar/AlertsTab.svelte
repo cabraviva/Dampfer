@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { alerts, pushAlert } = $props();
+  let { alerts, pushAlert, setAlerts } = $props();
 
   import Fa from "svelte-fa";
 
@@ -7,10 +7,13 @@
   import "../sidebar.scss";
   import { faBell } from "@fortawesome/free-solid-svg-icons";
 
-  import { Drawer, Toast, CloseButton } from "flowbite-svelte";
+  import { Drawer, Toast, CloseButton, Button } from "flowbite-svelte";
   import { sineIn } from "svelte/easing";
   import type { AlertType } from "../types";
-  import { faDochub, faDocker } from "@fortawesome/free-brands-svg-icons";
+  import { faDocker } from "@fortawesome/free-brands-svg-icons";
+  import { slide } from "svelte/transition";
+  import { Indicator } from "flowbite-svelte";
+
   let hidden1 = $state(true);
   let transitionParams = {
     x: -320,
@@ -18,28 +21,32 @@
     easing: sineIn,
   };
 
-  // TODO: Remove this later
-  setInterval(() => {
-    pushAlert({
-      icon: faDocker,
+  let newAlerts = $state(false);
 
-      color: "blue",
+  $effect(() => {
+    let areThereNewAlerts = false;
+    for (const alert of alerts) {
+      if (alert.toastStatus !== false) {
+        areThereNewAlerts = true;
+      }
+    }
 
-      content: "Docker Hub was not able to load!",
-
-      viewButton: {
-        text: "Fix!",
-        onclick: () => alert("Was not able to fix the error!"),
-      },
-
-      canBeIgnored: false,
-    } as AlertType);
-  }, 5_000);
+    newAlerts = areThereNewAlerts;
+  });
 </script>
+
+<!-- Alert Icon -->
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div onclick={() => (hidden1 = false)}><Fa icon={faBell} /></div>
+<div onclick={() => (hidden1 = false)}>
+  <Fa icon={faBell} />
+  {#if newAlerts}
+    <Indicator color="red" class="fixed" style="bottom: 4.4vh;left: 7.8vw;" />
+  {/if}
+</div>
+
+<!-- Alerts Panel -->
 
 <Drawer
   transitionType="fly"
@@ -62,15 +69,32 @@
 
   <div class="flex flex-col justify-start">
     {#each alerts as alert}
-      <div class="mb-3">
-        <!-- TODO: Onclose, view button, etc... -->
-        <Toast color={alert.color}>
-          <svelte:fragment slot="icon">
-            <div class="text-sm"><Fa icon={alert.icon} /></div>
-          </svelte:fragment>
-          {alert.content}
-        </Toast>
-      </div>
+      {#if alert.toastStatus !== false}
+        <div class="mb-3">
+          <Toast
+            color={alert.color}
+            transition={slide}
+            dismissable={alert.canBeIgnored}
+            bind:toastStatus={alert.toastStatus}
+          >
+            <svelte:fragment slot="icon">
+              <div class="text-sm"><Fa icon={alert.icon} /></div>
+            </svelte:fragment>
+
+            <div>
+              {alert.content}
+            </div>
+
+            {#if typeof alert.viewButton === "object"}
+              <div class="mt-2">
+                <Button on:click={alert.viewButton.onclick}>
+                  {alert.viewButton.text || "View"}
+                </Button>
+              </div>
+            {/if}
+          </Toast>
+        </div>
+      {/if}
     {/each}
   </div>
 </Drawer>

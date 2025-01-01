@@ -1,5 +1,6 @@
 <script lang="ts">
-  let { pageid, className, updatePage, alerts, pushAlert } = $props();
+  let { pageid, className, updatePage, alerts, pushAlert, setAlerts } =
+    $props();
   import Fa from "svelte-fa";
 
   import "./app.scss";
@@ -60,5 +61,5 @@
     {/await}
   </ul>
 
-  <SideBarTabs {alerts} {pushAlert} />
+  <SideBarTabs {alerts} {pushAlert} {setAlerts} />
 </nav>
