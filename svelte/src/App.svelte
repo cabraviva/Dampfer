@@ -33,5 +33,5 @@
     {setAlerts}
   />
 
-  <Page className="page" pageid={pageId} />
+  <Page className="page" pageid={pageId} {pushAlert} {updatePage} />
 </main>

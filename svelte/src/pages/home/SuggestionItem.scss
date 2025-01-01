@@ -1,0 +1,38 @@
+$primary: #00D0E9;
+$bg: #102E4A;
+$darkBg: #0c2339;
+$shadow: #071420;
+$white: #F8F7FF;
+$secondary: #43BCCD;
+
+.suggestion-item {
+    // bg-slate-400 w-50 h-16 mr-3 ml-3
+    background-color: $darkBg;
+    width: 12.5rem;
+    height: 4rem;
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+
+    border-radius: 10px;
+
+    padding: 0.25rem;
+    
+
+    .sugg-icon {
+        color: $primary;
+        margin-left: 0.5rem;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .sugg-text {
+        color: $white;
+        margin-right: 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    &:hover {
+        cursor: pointer;
+        border: 5px solid $primary;
+    }
+}
