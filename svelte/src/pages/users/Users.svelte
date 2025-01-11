@@ -3,6 +3,7 @@
     faCirclePlus,
     faTrash,
     faUserPlus,
+    faUserShield,
     faXmark,
   } from "@fortawesome/free-solid-svg-icons";
   import "../../app.scss";
@@ -13,6 +14,7 @@
     createUser,
     deleteUser,
     listUsers,
+    setPermissionForUser,
     type UserList,
   } from "../../script/user-api";
   import SmallPopup from "../../popups/SmallPopup.svelte";
@@ -52,6 +54,8 @@
   let showChangePermissionsPopup = $state(false);
   let showChangePasswordPopup = $state(false);
   let showDeleteModal = $state(false);
+
+  let selectedNewPermission = $state("insight");
 </script>
 
 <main
@@ -151,7 +155,52 @@
     show={mayShowAnyChangePopup && showChangePermissionsPopup}
     onclose={() => (showChangePermissionsPopup = false)}
   >
-    XYZ TODO:
+    <div class="pop-c">
+      <div class="inputs">
+        <div class="mb-6">
+          <Label>
+            Permission
+            <Select
+              class="mt-2"
+              items={permissionCheckbox}
+              bind:value={selectedNewPermission}
+            />
+          </Label>
+        </div>
+      </div>
+      <div class="buttons">
+        <Button
+          color="alternative"
+          on:click={() => (showChangePermissionsPopup = false)}>Cancel</Button
+        >
+        <Button
+          on:click={async () => {
+            showChangePermissionsPopup = false;
+
+            const success = await setPermissionForUser(
+              changingUser,
+              selectedNewPermission as "insight" | "admin" | "system-admin"
+            );
+
+            refetchUsers();
+
+            if (success) {
+              pushAlert({
+                icon: faUserShield,
+                color: "green",
+                content: `Successfully changed permission for user ${changingUser} to ${selectedNewPermission}`,
+              });
+            } else {
+              pushAlert({
+                icon: faUserShield,
+                color: "red",
+                content: `Error while trying to change permission for user ${changingUser} to ${selectedNewPermission}. You might want to check the logs!`,
+              });
+            }
+          }}>Save</Button
+        >
+      </div>
+    </div>
   </SmallPopup>
 
   <!-- Confirm delete popup -->
@@ -192,27 +241,30 @@
 
   <!-- User Management Boxes -->
   {#await whoami() then userInfo}
-    {#each users as user}
-      <UserManagementBox
-        {pushAlert}
-        {updatePage}
-        username={user.username}
-        permission={user.permission}
-        isme={userInfo.username === user.username}
-        onChangePermission={() => {
-          changingUser = user.username;
-          showChangePermissionsPopup = true;
-        }}
-        onChangePassword={() => {
-          changingUser = user.username;
-          showChangePasswordPopup = true;
-        }}
-        onDelete={() => {
-          changingUser = user.username;
-          showDeleteModal = true;
-        }}
-      />
-    {/each}
+    {#key users}
+      {#each users as user}
+        <UserManagementBox
+          {pushAlert}
+          {updatePage}
+          username={user.username}
+          permission={user.permission}
+          isme={userInfo.username === user.username}
+          onChangePermission={() => {
+            changingUser = user.username;
+            selectedNewPermission = user.permission;
+            showChangePermissionsPopup = true;
+          }}
+          onChangePassword={() => {
+            changingUser = user.username;
+            showChangePasswordPopup = true;
+          }}
+          onDelete={() => {
+            changingUser = user.username;
+            showDeleteModal = true;
+          }}
+        />
+      {/each}
+    {/key}
   {/await}
 </main>
 
