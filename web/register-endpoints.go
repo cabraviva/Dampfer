@@ -13,6 +13,12 @@ func RegisterEndpoints() {
 	api.Register("/login", routes.Login, http.MethodPost, false, "")
 	api.Register("/api/whoami", routes.Whoami, http.MethodGet, true, auth.Insight)
 
+	api.Register("/api/users/ls", routes.ListUsers, http.MethodGet, true, auth.SystemAdmin)
+	api.Register("/api/users/delete", routes.DeleteUser, http.MethodPost, true, auth.SystemAdmin)
+	api.Register("/api/users/create", routes.CreateUser, http.MethodPost, true, auth.SystemAdmin)
+	api.Register("/api/users/set-permission", routes.SetUserPermission, http.MethodPost, true, auth.SystemAdmin)
+	api.Register("/api/users/set-password-sysadmin", routes.SetUserPassword, http.MethodPost, true, auth.SystemAdmin)
+
 	api.Register("/api/docker/ready", routes.DockerReady, http.MethodGet, true, auth.Insight)
 	api.Register("/api/docker/container/running/list", routes.ListRunningContainers, http.MethodGet, true, auth.Insight)
 	api.Register("/api/docker/container/all/list", routes.ListAllContainers, http.MethodGet, true, auth.Insight)

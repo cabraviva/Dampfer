@@ -40,7 +40,11 @@
         "svelte/vite.config.ts": true
     },
     "cSpell.words": [
+        "autoclose",
+        "chperm",
+        "chpwd",
         "dismissable",
+        "isme",
         "jwtoken",
         "mattn",
         "sirupsen",

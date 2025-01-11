@@ -27,6 +27,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@types/p5": "^1.7.6",
+    "flowbite-svelte-icons": "^2.0.2",
     "jparticles": "^3.5.0",
     "knorry": "^1.0.0",
     "p5": "^1.11.2",
