@@ -1,12 +1,22 @@
 <script lang="ts">
-  import { faCirclePlus, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+  import {
+    faCirclePlus,
+    faTrash,
+    faUserPlus,
+    faXmark,
+  } from "@fortawesome/free-solid-svg-icons";
   import "../../app.scss";
   import UserManagementBox from "./UserManagementBox.svelte";
   import Fa from "svelte-fa";
   import { whoami } from "../../script/whoami";
-  import { createUser, listUsers, type UserList } from "../../script/user-api";
+  import {
+    createUser,
+    deleteUser,
+    listUsers,
+    type UserList,
+  } from "../../script/user-api";
   import SmallPopup from "../../popups/SmallPopup.svelte";
-  import { Button } from "flowbite-svelte";
+  import { Button, Modal } from "flowbite-svelte";
 
   let { pushAlert, updatePage } = $props();
 
@@ -34,6 +44,14 @@
       name: "Insight (Lowest permission, can't make changes)",
     },
   ]);
+
+  import { ExclamationCircleOutline } from "flowbite-svelte-icons";
+
+  let changingUser = $state("");
+  let mayShowAnyChangePopup = $derived(changingUser !== "");
+  let showChangePermissionsPopup = $state(false);
+  let showChangePasswordPopup = $state(false);
+  let showDeleteModal = $state(false);
 </script>
 
 <main
@@ -127,6 +145,51 @@
     </div>
   </SmallPopup>
 
+  <!-- Change Permissions Popup -->
+  <SmallPopup
+    title={"Change permission for: " + changingUser}
+    show={mayShowAnyChangePopup && showChangePermissionsPopup}
+    onclose={() => (showChangePermissionsPopup = false)}
+  >
+    XYZ TODO:
+  </SmallPopup>
+
+  <!-- Confirm delete popup -->
+  <Modal bind:open={showDeleteModal} size="xs" autoclose>
+    <div class="text-center">
+      <ExclamationCircleOutline
+        class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+      />
+      <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+        Are you sure you want to delete the user {changingUser}?
+      </h3>
+      <Button
+        color="primary"
+        class="me-2"
+        on:click={async () => {
+          const success = await deleteUser(changingUser);
+
+          refetchUsers();
+
+          if (success) {
+            pushAlert({
+              icon: faTrash,
+              color: "green",
+              content: `User ${changingUser} was deleted successfully`,
+            });
+          } else {
+            pushAlert({
+              icon: faXmark,
+              color: "red",
+              content: `Error while trying to delete user ${changingUser}. You might want to check the logs!`,
+            });
+          }
+        }}>Yes, I'm sure</Button
+      >
+      <Button color="alternative">No, cancel</Button>
+    </div>
+  </Modal>
+
   <!-- User Management Boxes -->
   {#await whoami() then userInfo}
     {#each users as user}
@@ -136,6 +199,18 @@
         username={user.username}
         permission={user.permission}
         isme={userInfo.username === user.username}
+        onChangePermission={() => {
+          changingUser = user.username;
+          showChangePermissionsPopup = true;
+        }}
+        onChangePassword={() => {
+          changingUser = user.username;
+          showChangePasswordPopup = true;
+        }}
+        onDelete={() => {
+          changingUser = user.username;
+          showDeleteModal = true;
+        }}
       />
     {/each}
   {/await}

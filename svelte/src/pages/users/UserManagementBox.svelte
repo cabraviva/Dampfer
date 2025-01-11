@@ -11,7 +11,16 @@
     faUserTie,
   } from "@fortawesome/free-solid-svg-icons";
 
-  let { pushAlert, updatePage, username, permission, isme = false } = $props();
+  let {
+    pushAlert,
+    updatePage,
+    username,
+    permission,
+    isme = false,
+    onChangePermission,
+    onChangePassword,
+    onDelete,
+  } = $props();
 
   let permissionText = $state("Insight");
 
@@ -39,6 +48,7 @@
       class="user-btn-chperm user-btn"
       title="Change permission"
       aria-label="Change permission"
+      onclick={onChangePermission}
     >
       <Fa icon={faShieldHalved} />
     </button>
@@ -47,6 +57,7 @@
       class="user-btn-chpwd user-btn"
       title="Change password"
       aria-label="Change password"
+      onclick={onChangePassword}
     >
       <Fa icon={faKey} />
     </button>
@@ -56,6 +67,7 @@
         class="user-btn-del user-btn"
         title="Delete user"
         aria-label="Delete user"
+        onclick={onDelete}
       >
         <Fa icon={faTrash} />
       </button>

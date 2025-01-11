@@ -37,3 +37,28 @@ export async function createUser(userData: CreateUserData): Promise<boolean> {
 
     return (req.data as unknown) === true
 }
+
+export async function setPermissionForUser(username: string, permission: UserListItem['permission']): Promise<boolean> {
+    const req = await knorry('POST', '/api/users/set-permission', {
+        username,
+        permission
+    }, {
+        headers: {
+            Authorization: `Bearer ${getCredentials()}`
+        }
+    }) as KnorryResponseObj
+
+    return (req.data as unknown) === true
+}
+
+export async function deleteUser(username: string): Promise<boolean> {
+    const req = await knorry('POST', '/api/users/delete', {
+        username
+    }, {
+        headers: {
+            Authorization: `Bearer ${getCredentials()}`
+        }
+    }) as KnorryResponseObj
+
+    return (req.data as unknown) === true
+}
