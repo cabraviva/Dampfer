@@ -8,4 +8,3 @@
 ## Backend
 
 ## Testing
-- [ ] Testing welcome suggestions for every permission
