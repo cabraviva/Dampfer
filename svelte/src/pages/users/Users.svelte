@@ -39,6 +39,7 @@
 <main
   class="flex justify-start flex-col w-full h-full items-start pt-4 pb-4 pl-8 pr-8"
 >
+  <!-- Heading + Create User Button -->
   <h1 class="text-3xl mb-8 heading">
     <span class="l">Manage users</span>
     <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -48,6 +49,7 @@
     </span>
   </h1>
 
+  <!-- Create User Popup -->
   <SmallPopup
     show={showPopup}
     onclose={() => (showPopup = false)}
@@ -125,6 +127,7 @@
     </div>
   </SmallPopup>
 
+  <!-- User Management Boxes -->
   {#await whoami() then userInfo}
     {#each users as user}
       <UserManagementBox
@@ -138,6 +141,7 @@
   {/await}
 </main>
 
+<!-- Local styling -->
 <style lang="scss">
   .pop-c {
     width: 100%;
