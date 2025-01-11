@@ -21,3 +21,19 @@ export async function listUsers(): Promise<UserList> {
 
     return req.data as unknown as UserList
 }
+
+export interface CreateUserData {
+    username: string,
+    password: string,
+    permission: UserListItem["permission"]
+}
+
+export async function createUser(userData: CreateUserData): Promise<boolean> {
+    const req = await knorry('POST', '/api/users/create', userData, {
+        headers: {
+            Authorization: `Bearer ${getCredentials()}`
+        }
+    }) as KnorryResponseObj
+
+    return (req.data as unknown) === true
+}
