@@ -23,9 +23,28 @@
         ".gitignore": true,
         ".gitattributes": true,
         "README.md": true,
-        "Dampfer.db": true
+        "Dampfer.db": true,
+        "svelte/.vscode": true,
+        "svelte/dist": true,
+        "svelte/node_modules": true,
+        "svelte/src/vite-env.d.ts": true,
+        "svelte/.gitignore": true,
+        "svelte/package.json": true,
+        "svelte/pnpm-lock.yaml": true,
+        "svelte/postcss.config.js": true,
+        "svelte/README.md": true,
+        "svelte/svelte.config.js": true,
+        "svelte/tailwind.config.ts": true,
+        "svelte/tsconfig.json": true,
+        "svelte/tsconfig.node.json": true,
+        "svelte/vite.config.ts": true
     },
     "cSpell.words": [
+        "autoclose",
+        "chperm",
+        "chpwd",
+        "dismissable",
+        "isme",
         "jwtoken",
         "mattn",
         "sirupsen",
@@ -76,7 +95,22 @@
                     ".gitignore",
                     ".gitattributes",
                     "README.md",
-                    "Dampfer.db"
+                    "Dampfer.db",
+                    // Config files
+                    "svelte/.vscode",
+                    "svelte/dist",
+                    "svelte/node_modules",
+                    "svelte/src/vite-env.d.ts",
+                    "svelte/.gitignore",
+                    "svelte/package.json",
+                    "svelte/pnpm-lock.yaml",
+                    "svelte/postcss.config.js",
+                    "svelte/README.md",
+                    "svelte/svelte.config.js",
+                    "svelte/tailwind.config.ts",
+                    "svelte/tsconfig.json",
+                    "svelte/tsconfig.node.json",
+                    "svelte/vite.config.ts"
                 ]
             }
         ]

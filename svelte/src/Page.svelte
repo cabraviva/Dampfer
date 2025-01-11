@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { pageid, className } = $props();
+  let { pageid, className, pushAlert, updatePage } = $props();
 
   import "./app.scss";
   import "./page.scss";
@@ -9,27 +9,27 @@
   import Settings from "./pages/settings/Settings.svelte";
   import System from "./pages/system/System.svelte";
   import Users from "./pages/users/Users.svelte";
-  import Images from "./pages/containers/images/Images.svelte";
+  import Images from "./pages/images/Images.svelte";
   import Volumes from "./pages/volumes/Volumes.svelte";
 </script>
 
 <main class={className + " page-container"}>
   {#if pageid === "home"}
-    <Home />
+    <Home {pushAlert} {updatePage} />
   {:else if pageid === "containers"}
-    <Containers />
+    <Containers {pushAlert} {updatePage} />
   {:else if pageid === "images"}
-    <Images />
+    <Images {pushAlert} {updatePage} />
   {:else if pageid === "volumes"}
-    <Volumes />
+    <Volumes {pushAlert} {updatePage} />
   {:else if pageid === "system"}
-    <System />
+    <System {pushAlert} {updatePage} />
   {:else if pageid === "backup"}
-    <Backup />
+    <Backup {pushAlert} {updatePage} />
   {:else if pageid === "users"}
-    <Users />
+    <Users {pushAlert} {updatePage} />
   {:else if pageid === "settings"}
-    <Settings />
+    <Settings {pushAlert} {updatePage} />
   {:else}
     <h1>404: Page could not be found</h1>
   {/if}

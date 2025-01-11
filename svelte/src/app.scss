@@ -1,3 +1,10 @@
+$primary: #00D0E9;
+$bg: #102E4A;
+$darkBg: #0c2339;
+$shadow: #071420;
+$white: #F8F7FF;
+$secondary: #43BCCD;
+
 $sideBarWidth: 15vw;
 
 @font-face {
@@ -34,4 +41,38 @@ $sideBarWidth: 15vw;
   right: 0;
   width: 100vw - $sideBarWidth;
   height: 100vh;
+}
+
+// Scrollbar
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  width: 0px;
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b8b8b8;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #6b6b6b;
+}
+
+// Selection
+::selection {
+  background: $bg;
+  color: $white;
+}
+
+::-moz-selection {
+  background: $bg;
+  color: $white;
 }
