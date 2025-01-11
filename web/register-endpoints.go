@@ -17,6 +17,7 @@ func RegisterEndpoints() {
 	api.Register("/api/users/delete", routes.DeleteUser, http.MethodPost, true, auth.SystemAdmin)
 	api.Register("/api/users/create", routes.CreateUser, http.MethodPost, true, auth.SystemAdmin)
 	api.Register("/api/users/set-permission", routes.SetUserPermission, http.MethodPost, true, auth.SystemAdmin)
+	api.Register("/api/users/set-password-sysadmin", routes.SetUserPassword, http.MethodPost, true, auth.SystemAdmin)
 
 	api.Register("/api/docker/ready", routes.DockerReady, http.MethodGet, true, auth.Insight)
 	api.Register("/api/docker/container/running/list", routes.ListRunningContainers, http.MethodGet, true, auth.Insight)

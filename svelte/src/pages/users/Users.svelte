@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     faCirclePlus,
+    faKey,
     faTrash,
     faUserPlus,
     faUserShield,
@@ -14,6 +15,7 @@
     createUser,
     deleteUser,
     listUsers,
+    setPasswordForUser,
     setPermissionForUser,
     type UserList,
   } from "../../script/user-api";
@@ -56,6 +58,7 @@
   let showDeleteModal = $state(false);
 
   let selectedNewPermission = $state("insight");
+  let selectedNewPassword = $state("");
 </script>
 
 <main
@@ -195,6 +198,68 @@
                 icon: faUserShield,
                 color: "red",
                 content: `Error while trying to change permission for user ${changingUser} to ${selectedNewPermission}. You might want to check the logs!`,
+              });
+            }
+          }}>Save</Button
+        >
+      </div>
+    </div>
+  </SmallPopup>
+
+  <!-- Change password Popup -->
+  <SmallPopup
+    title={"Change password for: " + changingUser}
+    show={mayShowAnyChangePopup && showChangePasswordPopup}
+    onclose={() => (showChangePasswordPopup = false)}
+  >
+    <div class="pop-c">
+      <div class="inputs">
+        <div class="mb-6">
+          <Label class="mb-2" for="password">Password</Label>
+          <Input
+            type="password"
+            id="password"
+            placeholder="•••••••••"
+            bind:value={selectedNewPassword}
+            required
+          />
+        </div>
+      </div>
+      <div class="buttons">
+        <Button
+          color="alternative"
+          on:click={() => (showChangePasswordPopup = false)}>Cancel</Button
+        >
+        <Button
+          on:click={async () => {
+            showChangePasswordPopup = false;
+
+            if (selectedNewPassword.length < 8) {
+              return pushAlert({
+                icon: faXmark,
+                color: "red",
+                content: `Could not change password. It must be at least 8 characters long!`,
+              });
+            }
+
+            const success = await setPasswordForUser(
+              changingUser,
+              selectedNewPassword
+            );
+
+            refetchUsers();
+
+            if (success) {
+              pushAlert({
+                icon: faKey,
+                color: "green",
+                content: `Successfully changed password for user ${changingUser}`,
+              });
+            } else {
+              pushAlert({
+                icon: faKey,
+                color: "red",
+                content: `Error while trying to change password for user ${changingUser}. You might want to check the logs!`,
               });
             }
           }}>Save</Button

@@ -44,14 +44,16 @@
   </div>
 
   <div class="user-right">
-    <button
-      class="user-btn-chperm user-btn"
-      title="Change permission"
-      aria-label="Change permission"
-      onclick={onChangePermission}
-    >
-      <Fa icon={faShieldHalved} />
-    </button>
+    {#if !isme}
+      <button
+        class="user-btn-chperm user-btn"
+        title="Change permission"
+        aria-label="Change permission"
+        onclick={onChangePermission}
+      >
+        <Fa icon={faShieldHalved} />
+      </button>
+    {/if}
 
     <button
       class="user-btn-chpwd user-btn"
