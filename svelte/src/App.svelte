@@ -22,7 +22,7 @@
 </script>
 
 <main>
-  <LoginCheck />
+  <LoginCheck {pushAlert} {updatePage} />
 
   <Sidebar
     className="sidebar"

@@ -22,3 +22,13 @@ export async function whoami(): Promise<UserInfo> {
 
     return req.data as unknown as UserInfo
 }
+
+export async function pwChangeCount(): Promise<number> {
+    const req = await knorry('GET', '/api/me/how-often-was-pw-changed', null, {
+        headers: {
+            Authorization: `Bearer ${getCredentials()}`
+        }
+    }) as KnorryResponseObj
+
+    return Number.isInteger(req.data as unknown as number) ? (req.data as unknown as number) : 0
+}
