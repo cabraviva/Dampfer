@@ -32,6 +32,8 @@
     }
 
     newAlerts = areThereNewAlerts;
+
+    if (newAlerts) hidden1 = false;
   });
 </script>
 
