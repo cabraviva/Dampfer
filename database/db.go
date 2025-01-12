@@ -43,6 +43,7 @@ func init() {
 	// Create the necessary tables
 	createUserTable()
 	createAuthTable()
+	createPasswordChangesTable()
 }
 
 // createUserTable creates the users table if it doesn't already exist
@@ -69,6 +70,20 @@ func createAuthTable() {
 	_, err := DB.Exec(query)
 	if err != nil {
 		utils.Log.Panic("Failed to create auth table: ", err)
+		panic(err)
+	}
+}
+
+// createPasswordChangesTable creates the password_changes table if it doesn't already exist
+func createPasswordChangesTable() {
+	query := `CREATE TABLE IF NOT EXISTS password_changes (
+        username TEXT PRIMARY KEY,
+        change_count INTEGER NOT NULL DEFAULT 0,
+        FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE
+    )`
+	_, err := DB.Exec(query)
+	if err != nil {
+		utils.Log.Panic("Failed to create password_changes table: ", err)
 		panic(err)
 	}
 }

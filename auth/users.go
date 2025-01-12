@@ -56,6 +56,12 @@ func CreateUser(username, password, permission string) error {
 		return err
 	}
 
+	_, err = db.Exec(`INSERT INTO password_changes (username, change_count) VALUES (?, 0)`, username)
+	if err != nil {
+		utils.Log.Error("Failed to insert into password_changes table: ", err)
+		return err
+	}
+
 	utils.Log.Info("User created successfully: ", username)
 	return nil
 }
@@ -89,7 +95,7 @@ func VerifyPassword(username, password string) (bool, error) {
 }
 
 // ChangePassword updates the password for an existing user
-func ChangePassword(username, newPassword string) error {
+func ChangePassword(username, newPassword string, incrementPwChangeCount bool) error {
 	hashedPassword, err := hashPassword(newPassword)
 	if err != nil {
 		return err
@@ -99,6 +105,16 @@ func ChangePassword(username, newPassword string) error {
 	if err != nil {
 		utils.Log.Error("Failed to change password: ", err)
 		return err
+	}
+
+	if incrementPwChangeCount {
+		_, err = db.Exec(`UPDATE password_changes SET change_count = change_count + 1 WHERE username = ?`, username)
+		if err != nil {
+			utils.Log.Error("Failed to update password change count: ", err)
+			return err
+		}
+
+		utils.Log.Info("Password changed and change count incremented successfully for user: ", username)
 	}
 
 	utils.Log.Info("Password changed successfully for user: ", username)

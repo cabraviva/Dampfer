@@ -28,6 +28,10 @@ type SetPasswordUserPayload struct {
 	Password string `json:"password"`
 }
 
+type ChangePasswordPayload struct {
+	Password string `json:"password"`
+}
+
 func ListUsers(w http.ResponseWriter, r *http.Request, username string) {
 	users, err := auth.ListUsers()
 
@@ -214,7 +218,53 @@ func SetUserPassword(w http.ResponseWriter, r *http.Request, username string) {
 		return
 	}
 
-	create_err := auth.ChangePassword(payload.Username, payload.Password)
+	create_err := auth.ChangePassword(payload.Username, payload.Password, false) // false because pw changed by admin
+
+	if create_err != nil {
+		http.Error(w, "Could not change password", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(true)
+}
+
+func ChangeMyPassword(w http.ResponseWriter, r *http.Request, username string) {
+	if r.Body == nil {
+		utils.Log.Info("Request body is empty")
+		http.Error(w, "Empty request body", http.StatusBadRequest)
+		return
+	}
+	defer r.Body.Close()
+
+	// Check and decode JSON
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		utils.Log.Error("Error reading request body: ", err)
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+
+	if !json.Valid(body) {
+		utils.Log.Info("Invalid JSON")
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	var payload ChangePasswordPayload
+	if err := json.Unmarshal(body, &payload); err != nil {
+		utils.Log.Error("Error decoding JSON: ", err)
+		http.Error(w, "Error decoding JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Validate fields
+	if payload.Password == "" {
+		utils.Log.Info("Missing required fields in JSON payload")
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
+
+	create_err := auth.ChangePassword(username, payload.Password, true) // True because pw change should increment
 
 	if create_err != nil {
 		http.Error(w, "Could not change password", http.StatusInternalServerError)
