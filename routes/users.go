@@ -210,7 +210,6 @@ func SetUserPassword(w http.ResponseWriter, r *http.Request, username string) {
 	if payload.Username == "" || (payload.Password == "") {
 		utils.Log.Info("Missing required fields in JSON payload")
 		utils.Log.Info("Received: username=" + payload.Username)
-		utils.Log.Info("Received: password=" + payload.Password)
 		http.Error(w, "Missing required fields", http.StatusBadRequest)
 		return
 	}
