@@ -6,5 +6,6 @@
 </script>
 
 <main class="flex justify-center flex-col w-full h-full items-center p-2">
+  <!-- TODO: Start settings page, User tab, Be able to change password -->
   <h1 class="text-5xl">Some Page...</h1>
 </main>
