@@ -29,7 +29,8 @@ type SetPasswordUserPayload struct {
 }
 
 type ChangePasswordPayload struct {
-	Password string `json:"password"`
+	OldPassword string `json:"old-password"`
+	Password    string `json:"password"`
 }
 
 func ListUsers(w http.ResponseWriter, r *http.Request, username string) {
@@ -258,9 +259,16 @@ func ChangeMyPassword(w http.ResponseWriter, r *http.Request, username string) {
 	}
 
 	// Validate fields
-	if payload.Password == "" {
+	if payload.Password == "" || payload.OldPassword == "" {
 		utils.Log.Info("Missing required fields in JSON payload")
 		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
+
+	// Verify old password
+	_, err = auth.GenerateTokenForUser(username, payload.OldPassword)
+	if err != nil {
+		http.Error(w, "Could not change password, old password is incorrect", http.StatusForbidden)
 		return
 	}
 

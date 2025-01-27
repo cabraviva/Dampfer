@@ -76,3 +76,15 @@ export async function setPasswordForUser(username: string, password: string): Pr
     return (req.data as unknown) === true
 }
 
+export async function changeMyPassword(oldPassword: string, newPassword: string): Promise<true | string> {
+    const req = await knorry('POST', '/api/me/change-password', {
+        "old-password": oldPassword,
+        "password": newPassword
+    }, {
+        headers: {
+            Authorization: `Bearer ${getCredentials()}`
+        }
+    }) as KnorryResponseObj
+
+    return (req.data as unknown) === true ? true : req.data as unknown as string
+}

@@ -1,0 +1,42 @@
+$primary: #00d0e9;
+$bg: #102e4a;
+$darkBg: #0c2339;
+$shadow: #071420;
+$white: #f8f7ff;
+$secondary: #43bccd;
+
+.settings-page {
+    * {
+            background-color: $white;
+            color: $bg;
+        }
+    
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: $primary;
+        }
+}
+
+.tabs {
+    *:not(.h-px):not(.btn-submit) {
+        background: none !important;
+        background-color: none !important;
+    }
+
+    .btn-submit {
+        background-color: #58D0DD;
+        color: $white;
+
+        * {
+            color: $white;
+        }
+
+        &:hover {
+            background-color: $primary;
+        }
+    }
+}
