@@ -36,6 +36,7 @@ func RegisterEndpoints() {
 
 	// Images
 	api.Register("/api/docker/image/list", routes.ListImages, http.MethodGet, true, auth.Insight)
+	api.Register("/api/docker/image/inspect", api.ImageInspect, http.MethodPost, true, auth.Insight)
 
 	// Volumes
 	api.Register("/api/docker/volume/list", routes.ListVolumes, http.MethodGet, true, auth.Insight)

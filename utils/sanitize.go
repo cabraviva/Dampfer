@@ -1,13 +1,20 @@
 package utils
 
-import "strings"
+import (
+	"regexp"
+)
 
-// SanitizeCommandPortion wraps the string in quotes and escapes quotes and backslashes
+// Allowed: The regular expression ^[a-zA-Z0-9_\-\.]+$ ensures that the input contains only alphanumeric characters, underscores, hyphens, and dots.
 func SanitizeCommandPortion(portion string) string {
-	// Escape backslashes first, then escape double quotes
-	escaped := strings.ReplaceAll(portion, `\`, `\\`)
-	escaped = strings.ReplaceAll(escaped, `"`, `\"`)
+	// Define a regular expression for allowed characters (alphanumeric, _, -, .)
+	re := regexp.MustCompile(`^[a-zA-Z0-9_\-\.]+$`)
 
-	// Return the portion wrapped in quotes
-	return `"` + escaped + `"`
+	// Check if the input matches the allowed pattern
+	if !re.MatchString(portion) {
+		Log.Warn("Some bad command portion was detected:" + portion + "\nIt will be ignored")
+		return ""
+	}
+
+	// Return the validated input
+	return portion
 }
