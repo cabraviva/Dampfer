@@ -6,6 +6,7 @@
   import type { AlertType } from "./types";
   import { dockerReady } from "./script/api/docker-general";
   import { faDocker } from "@fortawesome/free-brands-svg-icons";
+  import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
   let pageId = $state("home");
   let alerts: AlertType[] = $state([]);
@@ -35,6 +36,15 @@
         });
 
         console.error(drs);
+      }
+
+      if (drs.ComposeVersion === "v1") {
+        pushAlert({
+          color: "orange",
+          content:
+            'WARNING: You are still using "docker-compose" instead of "docker compose". Please consider installing docker plugin compose or updating otherwise.',
+          icon: faExclamationTriangle,
+        });
       }
     } catch {
       pushAlert({
