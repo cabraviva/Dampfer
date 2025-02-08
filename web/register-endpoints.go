@@ -30,6 +30,9 @@ func RegisterEndpoints() {
 	// ################# Logo / Icon Images #################
 	// Image Search
 	api.Register("/api/icongen/search", api.IconSearch, http.MethodGet, true, auth.Admin)
+	// Icon Retrieval & Upload
+	api.Register("/api/icongen/get-icon", api.GetIcon, http.MethodGet, true, auth.Insight)
+	api.Register("/api/icongen/upload-icon", api.UploadIcon, http.MethodPost, true, auth.Admin)
 
 	// ################# Docker #################
 	// Docker Ready

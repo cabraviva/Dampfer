@@ -44,6 +44,7 @@ func init() {
 	createUserTable()
 	createAuthTable()
 	createPasswordChangesTable()
+	createIconCacheTable()
 }
 
 // createUserTable creates the users table if it doesn't already exist
@@ -85,5 +86,18 @@ func createPasswordChangesTable() {
 	if err != nil {
 		utils.Log.Panic("Failed to create password_changes table: ", err)
 		panic(err)
+	}
+}
+
+// createIconCacheTable creates the icon_cache table if it doesn't already exist
+func createIconCacheTable() {
+	query := `CREATE TABLE IF NOT EXISTS icon_cache (
+        id TEXT PRIMARY KEY,
+        image BLOB NOT NULL,
+        mime_type TEXT NOT NULL
+    )`
+	_, err := DB.Exec(query)
+	if err != nil {
+		panic("Failed to create icon_cache table: " + err.Error())
 	}
 }
