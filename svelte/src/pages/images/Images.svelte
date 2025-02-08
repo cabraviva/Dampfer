@@ -20,7 +20,7 @@
     type UserList,
   } from "../../script/user-api";
   import SmallPopup from "../../popups/SmallPopup.svelte";
-  import { Button, Modal } from "flowbite-svelte";
+  import { Button, Modal, Spinner } from "flowbite-svelte";
   import { searchIcons } from "../../script/icongen";
   import { listImages } from "../../script/images-networks-volumes";
   import ImageBox from "./ImageBox.svelte";
@@ -59,7 +59,12 @@
   </h1>
 
   <!-- Images List -->
-  {#await listImages() then images}
+  {#await listImages()}
+    <div class="spinner-center text-center">
+      <Spinner size={20} />
+      <h2 class="mt-5">Loading images, please wait...</h2>
+    </div>
+  {:then images}
     {#each images as image}
       <ImageBox {pushAlert} {updatePage} {image} />
     {/each}
@@ -82,5 +87,14 @@
         color: #0d7e2b;
       }
     }
+  }
+
+  .spinner-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
   }
 </style>
