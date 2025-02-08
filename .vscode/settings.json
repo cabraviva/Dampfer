@@ -24,6 +24,7 @@
         ".gitattributes": true,
         "README.md": true,
         "Dampfer.db": true,
+        "icongen/": true,
         "svelte/.vscode": true,
         "svelte/dist": true,
         "svelte/node_modules": true,
@@ -97,6 +98,7 @@
                     ".gitattributes",
                     "README.md",
                     "Dampfer.db",
+                    "icongen/",
                     // Config files
                     "svelte/.vscode",
                     "svelte/dist",
@@ -111,7 +113,7 @@
                     "svelte/tailwind.config.ts",
                     "svelte/tsconfig.json",
                     "svelte/tsconfig.node.json",
-                    "svelte/vite.config.ts"
+                    "svelte/vite.config.ts",
                 ]
             }
         ]

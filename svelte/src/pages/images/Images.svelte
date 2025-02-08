@@ -22,6 +22,7 @@
   import SmallPopup from "../../popups/SmallPopup.svelte";
   import { Button, Modal } from "flowbite-svelte";
   import { searchIcons } from "../../script/icongen";
+  import { listImages } from "../../script/images-networks-volumes";
 
   let { pushAlert, updatePage } = $props();
 
@@ -36,6 +37,10 @@
   refetchUsers();
 
   let showPullPopup = $state(false);
+
+  (async () => {
+    console.log(await listImages());
+  })();
 </script>
 
 <main
