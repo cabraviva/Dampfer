@@ -1,0 +1,43 @@
+$primary: #00D0E9;
+$bg: #102E4A;
+$darkBg: #0c2339;
+$shadow: #071420;
+$white: #F8F7FF;
+$secondary: #43BCCD;
+
+.image-box {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    // padding-top: 0.5rem;
+    // padding-bottom: 0.5rem;
+    // padding-left: 1rem;
+    // padding-right: 1rem;
+
+    border: 2px solid $shadow;
+    border-radius: 20px;
+
+    width: 100%;
+    height: 10vh;
+
+    margin-bottom: 1rem;
+
+    .icon {
+        width: 10vh;
+        height: 100%;
+        border-right: 2px solid $shadow;
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+        padding: 0.5rem;
+        
+        img {
+            height: auto;
+            width: 100%;
+        }
+    }
+}

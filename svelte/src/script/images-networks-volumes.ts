@@ -23,7 +23,7 @@ export async function listImages(): Promise<ListedImage[]> {
     return imagelist as ListedImage[]
 }
 
-interface ListedImage {
+export interface ListedImage {
     Containers: string,
     CreatedAt: Date,
     CreatedSince: string,

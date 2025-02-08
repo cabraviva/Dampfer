@@ -23,6 +23,7 @@
   import { Button, Modal } from "flowbite-svelte";
   import { searchIcons } from "../../script/icongen";
   import { listImages } from "../../script/images-networks-volumes";
+  import ImageBox from "./ImageBox.svelte";
 
   let { pushAlert, updatePage } = $props();
 
@@ -37,10 +38,6 @@
   refetchUsers();
 
   let showPullPopup = $state(false);
-
-  (async () => {
-    console.log(await listImages());
-  })();
 </script>
 
 <main
@@ -62,6 +59,11 @@
   </h1>
 
   <!-- Images List -->
+  {#await listImages() then images}
+    {#each images as image}
+      <ImageBox {pushAlert} {updatePage} {image} />
+    {/each}
+  {/await}
 </main>
 
 <!-- Local styling -->
