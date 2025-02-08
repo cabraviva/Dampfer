@@ -94,3 +94,24 @@ func UploadIcon(w http.ResponseWriter, r *http.Request, username string) {
 
 	w.Write([]byte("Image uploaded successfully"))
 }
+
+// DownloadImageHandler handles downloading an image from an external URL and storing it in the DB
+func DownloadImageHandler(w http.ResponseWriter, r *http.Request, username string) {
+	// Get the id and image_url query parameters
+	id := r.URL.Query().Get("id")
+	imageURL := r.URL.Query().Get("image_url")
+
+	if id == "" || imageURL == "" {
+		http.Error(w, "Both 'id' and 'image_url' query parameters are required", http.StatusBadRequest)
+		return
+	}
+
+	// Download the image and store it in the database
+	err := icongen.DownloadImageToDB(id, imageURL)
+	if err != nil {
+		http.Error(w, "Failed to download or save image: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte("Image downloaded and stored successfully"))
+}
