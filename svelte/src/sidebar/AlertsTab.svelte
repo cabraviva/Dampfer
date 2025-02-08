@@ -70,7 +70,7 @@
   </div>
 
   <div class="flex flex-col justify-start">
-    {#each alerts as alert}
+    {#each alerts.reverse() as alert}
       {#if alert.toastStatus !== false}
         <div class="mb-3">
           <Toast
