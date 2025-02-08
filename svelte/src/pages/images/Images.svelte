@@ -21,6 +21,7 @@
   } from "../../script/user-api";
   import SmallPopup from "../../popups/SmallPopup.svelte";
   import { Button, Modal } from "flowbite-svelte";
+  import { searchIcons } from "../../script/icongen";
 
   let { pushAlert, updatePage } = $props();
 

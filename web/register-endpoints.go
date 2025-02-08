@@ -27,6 +27,10 @@ func RegisterEndpoints() {
 	api.Register("/api/me/change-password", routes.ChangeMyPassword, http.MethodPost, true, auth.Insight)
 	api.Register("/api/me/how-often-was-pw-changed", routes.MyPwChanges, http.MethodGet, true, auth.Insight)
 
+	// ################# Logo / Icon Images #################
+	// Image Search
+	api.Register("/api/icongen/search", api.IconSearch, http.MethodGet, true, auth.Admin)
+
 	// ################# Docker #################
 	// Docker Ready
 	api.Register("/api/docker/ready", routes.DockerReady, http.MethodGet, true, auth.Insight)
