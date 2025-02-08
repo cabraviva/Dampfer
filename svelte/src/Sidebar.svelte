@@ -12,6 +12,7 @@
     faClockRotateLeft,
     faGears,
     faHouse,
+    faNetworkWired,
     faSdCard,
     faServer,
     faUsers,
@@ -38,6 +39,9 @@
     </SidebarButton>
     <SidebarButton currentPageId={pageid} {updatePage} pageid="volumes">
       <Fa icon={faSdCard} class="mr-3" /> Volumes
+    </SidebarButton>
+    <SidebarButton currentPageId={pageid} {updatePage} pageid="networks">
+      <Fa icon={faNetworkWired} class="mr-3" /> Networks
     </SidebarButton>
     <SidebarButton currentPageId={pageid} {updatePage} pageid="system">
       <Fa icon={faServer} class="mr-3" /> System

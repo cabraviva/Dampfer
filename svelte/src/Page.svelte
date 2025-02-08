@@ -11,6 +11,7 @@
   import Users from "./pages/users/Users.svelte";
   import Images from "./pages/images/Images.svelte";
   import Volumes from "./pages/volumes/Volumes.svelte";
+  import Networks from "./pages/networks/Networks.svelte";
 </script>
 
 <main class={className + " page-container"}>
@@ -22,6 +23,8 @@
     <Images {pushAlert} {updatePage} />
   {:else if pageid === "volumes"}
     <Volumes {pushAlert} {updatePage} />
+  {:else if pageid === "networks"}
+    <Networks {pushAlert} {updatePage} />
   {:else if pageid === "system"}
     <System {pushAlert} {updatePage} />
   {:else if pageid === "backup"}
