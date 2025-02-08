@@ -55,12 +55,12 @@ export function getAverageBackgroundColor(imgElement: HTMLImageElement): Promise
             // Process outermost pixels (top, bottom, left, right)
             for (let x = 0; x < width; x++) {
                 processPixel(x, 0);             // Top row
-                processPixel(x, height - 1);    // Bottom row
+                // processPixel(x, height - 1);    // Bottom row
             }
-            for (let y = 0; y < height; y++) {
-                processPixel(0, y);             // Left column
-                processPixel(width - 1, y);     // Right column
-            }
+            // for (let y = 0; y < height; y++) {
+            //     processPixel(0, y);             // Left column
+            //     processPixel(width - 1, y);     // Right column
+            // }
 
             if (count === 0) {
                 resolve("rgba(0, 0, 0, 0)"); // Fully transparent

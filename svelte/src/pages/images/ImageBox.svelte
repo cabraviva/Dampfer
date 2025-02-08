@@ -6,6 +6,8 @@
   import type { ListedImage } from "../../script/images-networks-volumes";
   import { onMount } from "svelte";
   import { getAverageBackgroundColor, searchIcons } from "../../script/icongen";
+  import knorry from "knorry";
+  import { getCredentials } from "../../script/login";
 
   let { pushAlert, updatePage, image } = $props() as {
     pushAlert: (alert: AlertType) => void;
@@ -38,8 +40,10 @@
 
 <div class="image-box">
   <div class="icon" bind:this={iconContainer}>
-    {#await searchIcons(image.Repository) then searchResults}
-      <img src={searchResults[0]} alt="{image.Repository}:{image.Tag}" />
+    {#await fetch( `/api/icongen/get-icon?id=${encodeURIComponent(image.ID)}`, { headers: { Authorization: `Bearer ${getCredentials()}` } } ) then imgRes}
+      {#await imgRes.blob() then blob}
+        <img src={URL.createObjectURL(blob)} alt="" />
+      {/await}
     {/await}
   </div>
   <div class="info">
