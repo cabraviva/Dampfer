@@ -34,7 +34,7 @@
 
   refetchUsers();
 
-  let showPopup = $state(false);
+  let showPullPopup = $state(false);
 </script>
 
 <main
@@ -48,30 +48,14 @@
       {#if userInfo.admin}
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <span class="r" onclick={() => (showPopup = true)}>
+        <span class="r" onclick={() => (showPullPopup = true)}>
           <Fa icon={faCirclePlus} />
         </span>
       {/if}
     {/await}
   </h1>
 
-  <!-- User Management Boxes -->
-  {#await whoami() then userInfo}
-    {#key users}
-      {#each users as user}
-        <UserManagementBox
-          {pushAlert}
-          {updatePage}
-          username={user.username}
-          permission={user.permission}
-          isme={userInfo.username === user.username}
-          onChangePermission={() => {}}
-          onChangePassword={() => {}}
-          onDelete={() => {}}
-        />
-      {/each}
-    {/key}
-  {/await}
+  <!-- Images List -->
 </main>
 
 <!-- Local styling -->
