@@ -38,6 +38,14 @@
   });
 </script>
 
+<!-- TODO:
+        - Pull images
+        - Authentication when pulling
+        - Editing image: Delete, change image via A) Search B) Upload
+        - Better image info on list page
+        - Detailed image info when clicking on image (using image inspect)
+-->
+
 <div class="image-box">
   <div class="icon" bind:this={iconContainer}>
     {#await fetch( `/api/icongen/get-icon?id=${encodeURIComponent(image.ID)}`, { headers: { Authorization: `Bearer ${getCredentials()}` } } ) then imgRes}
