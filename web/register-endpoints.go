@@ -13,6 +13,7 @@ func RegisterEndpoints() {
 
 	//  Login
 	api.Register("/login", routes.Login, http.MethodPost, false, "")
+	api.Register("/api/jwt-valid-check", api.JWTValidCheckEndpoint, http.MethodGet, true, auth.Insight)
 
 	// User Management
 	api.Register("/api/users/ls", routes.ListUsers, http.MethodGet, true, auth.SystemAdmin)

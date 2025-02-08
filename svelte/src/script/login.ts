@@ -25,7 +25,7 @@ export function setSavedUsername(user: string): void {
 }
 
 export async function isJWTValid(): Promise<boolean> {
-    const req = await knorry('GET', '/api/endpoints', null, {
+    const req = await knorry('GET', '/api/jwt-valid-check', null, {
         headers: {
             Authorization: `Bearer ${getCredentials()}`
         }
