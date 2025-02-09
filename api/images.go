@@ -53,3 +53,25 @@ func ImageInspect(w http.ResponseWriter, r *http.Request, username string) {
 
 	json.NewEncoder(w).Encode(images)
 }
+
+func ImageDelete(w http.ResponseWriter, r *http.Request, username string) {
+	// Get the query parameters
+	repository := r.URL.Query().Get("repository")
+	tag := r.URL.Query().Get("tag")
+
+	if repository == "" || tag == "" {
+		http.Error(w, "Both 'repository' and 'tag' query parameters are required", http.StatusBadRequest)
+		return
+	}
+
+	// Download the image and store it in the database
+	success, err := docker.ImageRm(repository, tag)
+	if err != nil {
+		utils.Log.Warn("Failed to delete image: " + err.Error())
+		json.NewEncoder(w).Encode(false)
+
+		return
+	}
+
+	json.NewEncoder(w).Encode(success)
+}

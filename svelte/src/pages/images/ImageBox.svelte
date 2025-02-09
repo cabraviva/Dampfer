@@ -4,23 +4,40 @@
   import "./image-box.scss";
   import type { AlertType } from "../../types";
   import {
+    deleteImage,
     inspectImage,
     type ListedImagesGroupedItem,
   } from "../../script/images-networks-volumes";
   import { onMount } from "svelte";
   import { getAverageBackgroundColor, searchIcons } from "../../script/icongen";
-  import knorry from "knorry";
+  import knorry, { del } from "knorry";
   import { getCredentials } from "../../script/login";
-  import { Button, Dropdown, DropdownDivider, Radio } from "flowbite-svelte";
-  import { ChevronDownOutline } from "flowbite-svelte-icons";
-  import { faEye, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+  import {
+    Button,
+    Dropdown,
+    DropdownDivider,
+    Modal,
+    Radio,
+  } from "flowbite-svelte";
+  import {
+    ChevronDownOutline,
+    ExclamationCircleOutline,
+  } from "flowbite-svelte-icons";
+  import {
+    faEye,
+    faPen,
+    faTrash,
+    faXmark,
+  } from "@fortawesome/free-solid-svg-icons";
   import SmallPopup from "../../popups/SmallPopup.svelte";
 
-  let { pushAlert, updatePage, imagesWithSameTag } = $props() as {
-    pushAlert: (alert: AlertType) => void;
-    updatePage: (name: string) => void;
-    imagesWithSameTag: ListedImagesGroupedItem;
-  };
+  let { pushAlert, updatePage, imagesWithSameTag, refetchImages } =
+    $props() as {
+      pushAlert: (alert: AlertType) => void;
+      updatePage: (name: string) => void;
+      refetchImages: () => void;
+      imagesWithSameTag: ListedImagesGroupedItem;
+    };
 
   let iconContainer: HTMLDivElement | null = $state(null);
 
@@ -70,18 +87,20 @@
 
   // Popup states
   let showMoreInfoPopup = $state(false);
+  let showDeleteModal = $state(false);
 </script>
 
 <!-- TODO:
         - Pull images
         - Authentication when pulling
-        - Editing image: Delete, change image via A) Search B) Upload
+        - Editing image: change image via A) Search B) Upload
         - Better image info on list page
         - Schedule re-pulling
         - Add in-use marker
-        - Add prompts if deleting when in use
+        - Import & Export images
 -->
 
+<!-- View more popup -->
 <SmallPopup
   show={showMoreInfoPopup}
   onclose={() => (showMoreInfoPopup = false)}
@@ -123,6 +142,48 @@
     <br /><br />
   {/each}
 </SmallPopup>
+
+<!-- Confirm delete popup -->
+<Modal bind:open={showDeleteModal} size="xs" autoclose>
+  <div class="text-center">
+    <ExclamationCircleOutline
+      class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+    />
+    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+      Are you sure you want to delete the image {imagesWithSameTag.images.filter(
+        (i) => i.Tag === selectedTag
+      )[0].Repository}:{imagesWithSameTag.images.filter(
+        (i) => i.Tag === selectedTag
+      )[0].Tag}
+    </h3>
+    <Button
+      color="primary"
+      class="me-2"
+      on:click={async () => {
+        const success = await deleteImage(
+          imagesWithSameTag.images[0].Repository,
+          selectedTag
+        );
+
+        if (success === true) {
+          pushAlert({
+            icon: faTrash,
+            color: "green",
+            content: `Image ${imagesWithSameTag.images.filter((i) => i.Tag === selectedTag)[0].Repository}:${imagesWithSameTag.images.filter((i) => i.Tag === selectedTag)[0].Tag} was deleted successfully`,
+          });
+          refetchImages();
+        } else {
+          pushAlert({
+            icon: faXmark,
+            color: "red",
+            content: `Error while trying to delete image ${imagesWithSameTag.images.filter((i) => i.Tag === selectedTag)[0].Repository}:${imagesWithSameTag.images.filter((i) => i.Tag === selectedTag)[0].Tag}. You might want to check the logs!`,
+          });
+        }
+      }}>Yes, I'm sure</Button
+    >
+    <Button color="alternative">No, cancel</Button>
+  </div>
+</Modal>
 
 <div class="image-box">
   <div class="icon" bind:this={iconContainer}>
@@ -179,7 +240,12 @@
     <button>
       <Fa icon={faPen} />
     </button>
-    <button class="rm">
+    <button
+      class="rm"
+      onclick={async () => {
+        showDeleteModal = true;
+      }}
+    >
       <Fa icon={faTrash} />
     </button>
   </div>

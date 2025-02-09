@@ -23,6 +23,16 @@ export async function listImages(): Promise<ListedImage[]> {
     return imagelist as ListedImage[]
 }
 
+export async function deleteImage(repository: string, tag: string): Promise<boolean> {
+    const req = await knorry('GET', `/api/docker/image/rm?repository=${encodeURIComponent(repository)}&tag=${encodeURIComponent(tag)}`, null, {
+        headers: {
+            Authorization: `Bearer ${getCredentials()}`
+        }
+    }) as KnorryResponseObj
+
+    return req.data as unknown as boolean
+}
+
 export async function inspectImage(id: string): Promise<InspectedImage> {
     const req = await knorry('POST', `/api/docker/image/inspect`, {
         id
@@ -33,11 +43,6 @@ export async function inspectImage(id: string): Promise<InspectedImage> {
     }) as KnorryResponseObj
 
     let imagelist = req.data as unknown as any[]
-
-    // imagelist = imagelist.map(image => {
-    //     image.CreatedAt = new Date(image.CreatedAt.replace(/[A-Z]/gi, ''))
-    //     return image
-    // })
 
     return imagelist[0] as InspectedImage
 }

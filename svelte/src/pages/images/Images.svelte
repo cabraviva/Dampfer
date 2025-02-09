@@ -13,15 +13,6 @@
   import UserManagementBox from "../users/UserManagementBox.svelte";
   import Fa from "svelte-fa";
   import { whoami } from "../../script/whoami";
-  import {
-    createUser,
-    deleteUser,
-    listUsers,
-    setPasswordForUser,
-    setPermissionForUser,
-    type UserList,
-  } from "../../script/user-api";
-  import SmallPopup from "../../popups/SmallPopup.svelte";
   import { Button, Modal, Spinner } from "flowbite-svelte";
   import { searchIcons } from "../../script/icongen";
   import {
@@ -32,16 +23,6 @@
   import ImageBox from "./ImageBox.svelte";
 
   let { pushAlert, updatePage } = $props();
-
-  let users: UserList = $state([]);
-
-  function refetchUsers() {
-    listUsers().then((userVal) => {
-      users = userVal;
-    });
-  }
-
-  refetchUsers();
 
   function groupImagesByTag(ungrouped: ListedImage[]): ListedImagesGrouped {
     const grouped: ListedImagesGrouped = {};
@@ -65,6 +46,11 @@
   }
 
   let showPullPopup = $state(false);
+  let refetch = $state(Math.random());
+
+  function refetchImages() {
+    refetch = new Date().getTime() ** Math.random();
+  }
 </script>
 
 <main
@@ -86,16 +72,23 @@
   </h1>
 
   <!-- Images List -->
-  {#await listImages()}
-    <div class="spinner-center text-center">
-      <Spinner size={20} />
-      <h2 class="mt-5">Loading images, please wait...</h2>
-    </div>
-  {:then images}
-    {#each Object.entries(groupImagesByTag(images)).sort( (a, b) => ("" + a[0]).localeCompare(b[0]) ) as [repository, imagesWithSameTag]}
-      <ImageBox {pushAlert} {updatePage} {imagesWithSameTag} />
-    {/each}
-  {/await}
+  {#key refetch}
+    {#await listImages()}
+      <div class="spinner-center text-center">
+        <Spinner size={20} />
+        <h2 class="mt-5">Loading images, please wait...</h2>
+      </div>
+    {:then images}
+      {#each Object.entries(groupImagesByTag(images)).sort( (a, b) => ("" + a[0]).localeCompare(b[0]) ) as [repository, imagesWithSameTag]}
+        <ImageBox
+          {pushAlert}
+          {updatePage}
+          {imagesWithSameTag}
+          {refetchImages}
+        />
+      {/each}
+    {/await}
+  {/key}
 </main>
 
 <!-- Local styling -->
