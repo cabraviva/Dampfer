@@ -22,7 +22,11 @@
   import SmallPopup from "../../popups/SmallPopup.svelte";
   import { Button, Modal, Spinner } from "flowbite-svelte";
   import { searchIcons } from "../../script/icongen";
-  import { listImages } from "../../script/images-networks-volumes";
+  import {
+    listImages,
+    type ListedImage,
+    type ListedImagesGrouped,
+  } from "../../script/images-networks-volumes";
   import ImageBox from "./ImageBox.svelte";
 
   let { pushAlert, updatePage } = $props();
@@ -36,6 +40,27 @@
   }
 
   refetchUsers();
+
+  function groupImagesByTag(ungrouped: ListedImage[]): ListedImagesGrouped {
+    const grouped: ListedImagesGrouped = {};
+
+    for (const image of ungrouped) {
+      // Create entry if non existent
+      if (!grouped[image.Repository])
+        grouped[image.Repository] = {
+          tags: [],
+          images: [],
+        };
+
+      // Add image to grouped
+      grouped[image.Repository].images.push(image);
+
+      // Add tag
+      grouped[image.Repository].tags.push(image.Tag);
+    }
+
+    return grouped;
+  }
 
   let showPullPopup = $state(false);
 </script>
@@ -65,8 +90,8 @@
       <h2 class="mt-5">Loading images, please wait...</h2>
     </div>
   {:then images}
-    {#each images as image}
-      <ImageBox {pushAlert} {updatePage} {image} />
+    {#each Object.entries(groupImagesByTag(images)).sort( (a, b) => ("" + a[0]).localeCompare(b[0]) ) as [repository, imagesWithSameTag]}
+      <ImageBox {pushAlert} {updatePage} {imagesWithSameTag} />
     {/each}
   {/await}
 </main>
