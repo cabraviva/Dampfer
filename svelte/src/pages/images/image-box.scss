@@ -47,9 +47,37 @@ $secondary: #43BCCD;
         .name {
             color: $primary;
         }
+    }
 
-        .tags {
-            // color: $bg;
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin-right: 2rem;
+        
+        button {
+            padding-left: 1rem;
+            padding-right: 1rem;
+            font-size: xx-large;
+            color: $secondary;
+
+            &:hover {
+                cursor: pointer;
+                color: $bg;
+
+                &.rm {
+                    color: #ac0d0d;
+                }
+            }
         }
     }
+}
+
+.darker-span {
+    color: $bg;
+}
+
+.primary-span {
+    color: $primary;
 }

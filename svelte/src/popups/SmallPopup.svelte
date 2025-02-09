@@ -15,7 +15,7 @@
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div onclick={onclose}><Fa icon={faXmark} /></div>
     </div>
-    <div class="small-popup-content">
+    <div class="small-popup-content" style="overflow: auto;">
       {@render children?.()}
     </div>
   </div>

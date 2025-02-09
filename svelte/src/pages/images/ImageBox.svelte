@@ -3,13 +3,18 @@
   import "../../app.scss";
   import "./image-box.scss";
   import type { AlertType } from "../../types";
-  import { type ListedImagesGroupedItem } from "../../script/images-networks-volumes";
+  import {
+    inspectImage,
+    type ListedImagesGroupedItem,
+  } from "../../script/images-networks-volumes";
   import { onMount } from "svelte";
   import { getAverageBackgroundColor, searchIcons } from "../../script/icongen";
   import knorry from "knorry";
   import { getCredentials } from "../../script/login";
   import { Button, Dropdown, DropdownDivider, Radio } from "flowbite-svelte";
   import { ChevronDownOutline } from "flowbite-svelte-icons";
+  import { faEye, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+  import SmallPopup from "../../popups/SmallPopup.svelte";
 
   let { pushAlert, updatePage, imagesWithSameTag } = $props() as {
     pushAlert: (alert: AlertType) => void;
@@ -38,7 +43,6 @@
     calcBg();
   });
 
-  // TODO: sort tags so that latest is on top, 2. is nightly and then all others are sorted by default array.sort
   const sortedTags: (string | null)[] = [null, null];
   const preSortedTags = imagesWithSameTag.tags.sort();
 
@@ -63,6 +67,9 @@
   }
 
   let selectedTag = $state(firstTagNonNull);
+
+  // Popup states
+  let showMoreInfoPopup = $state(false);
 </script>
 
 <!-- TODO:
@@ -70,12 +77,52 @@
         - Authentication when pulling
         - Editing image: Delete, change image via A) Search B) Upload
         - Better image info on list page
-        - Detailed image info when clicking on image (using image inspect)
-        - Group images by tag
         - Schedule re-pulling
         - Add in-use marker
         - Add prompts if deleting when in use
 -->
+
+<SmallPopup
+  show={showMoreInfoPopup}
+  onclose={() => (showMoreInfoPopup = false)}
+  title="View image: {imagesWithSameTag.images[0].Repository}"
+>
+  {#each imagesWithSameTag.images as current_image}
+    {#await inspectImage(current_image.ID) then details}
+      <h2>
+        {current_image.Repository}<span class="darker-span"
+          >:{current_image.Tag}</span
+        >
+      </h2>
+      {#each Object.entries(details) as [cd1k, cd1v]}
+        <span class="darker-span">{cd1k}:</span>
+        <span class="primary-span">
+          {#if Array.isArray(cd1v)}
+            {JSON.stringify(cd1v)}
+          {:else if typeof cd1v === "object"}
+            {#each Object.entries(cd1v) as [cd2k, cd2v]}
+              <br />
+              <span class="darker-span ml-4">{cd2k}:</span>
+              <span class="primary-span">
+                {#if Array.isArray(cd2v)}
+                  {JSON.stringify(cd2v)}
+                {:else if typeof cd2v === "object"}
+                  {JSON.stringify(cd2v)}
+                {:else}
+                  {cd2v}
+                {/if}
+              </span>
+            {/each}
+          {:else}
+            {cd1v}
+          {/if}
+        </span>
+        <br />
+      {/each}
+    {/await}
+    <br /><br />
+  {/each}
+</SmallPopup>
 
 <div class="image-box">
   <div class="icon" bind:this={iconContainer}>
@@ -121,5 +168,19 @@
       {/if}
     </span>
   </div>
-  <div class="buttons"></div>
+  <div class="buttons">
+    <button
+      onclick={async () => {
+        showMoreInfoPopup = true;
+      }}
+    >
+      <Fa icon={faEye} />
+    </button>
+    <button>
+      <Fa icon={faPen} />
+    </button>
+    <button class="rm">
+      <Fa icon={faTrash} />
+    </button>
+  </div>
 </div>
