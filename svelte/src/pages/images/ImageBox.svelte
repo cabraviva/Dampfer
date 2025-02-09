@@ -8,6 +8,8 @@
   import { getAverageBackgroundColor, searchIcons } from "../../script/icongen";
   import knorry from "knorry";
   import { getCredentials } from "../../script/login";
+  import { Button, Dropdown, Radio } from "flowbite-svelte";
+  import { ChevronDownOutline } from "flowbite-svelte-icons";
 
   let { pushAlert, updatePage, imagesWithSameTag } = $props() as {
     pushAlert: (alert: AlertType) => void;
@@ -35,6 +37,10 @@
     }
     calcBg();
   });
+
+  // TODO: sort tags so that latest is on top, 2. is nightly and then all others are sorted by default array.sort
+
+  let selectedTag = $state(imagesWithSameTag.tags[0]);
 </script>
 
 <!-- TODO:
@@ -45,6 +51,8 @@
         - Detailed image info when clicking on image (using image inspect)
         - Group images by tag
         - Schedule re-pulling
+        - Add in-use marker
+        - Add prompts if deleting when in use
 -->
 
 <div class="image-box">
@@ -56,7 +64,26 @@
     {/await}
   </div>
   <div class="info">
-    {imagesWithSameTag.images[0].Repository}:{imagesWithSameTag.tags.join(",")}
+    <span class="repo">{imagesWithSameTag.images[0].Repository}</span>
+    <span class="tags">
+      <Button>
+        :{selectedTag}
+        {#if imagesWithSameTag.tags.length > 1}
+          <ChevronDownOutline class="w-6 h-6 ms-2 text-white dark:text-white" />
+        {/if}
+      </Button>
+      {#if imagesWithSameTag.tags.length > 1}
+        <Dropdown class="w-48 p-3 space-y-1">
+          {#each imagesWithSameTag.tags as tag}
+            <li class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+              <Radio name="group2" bind:group={selectedTag} value={tag}
+                >{tag}</Radio
+              >
+            </li>
+          {/each}
+        </Dropdown>
+      {/if}
+    </span>
   </div>
   <div class="buttons"></div>
 </div>

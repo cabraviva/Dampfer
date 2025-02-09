@@ -42,4 +42,14 @@ $secondary: #43BCCD;
             width: 100%;
         }
     }
+
+    .info {
+        .name {
+            color: $primary;
+        }
+
+        .tags {
+            // color: $bg;
+        }
+    }
 }
